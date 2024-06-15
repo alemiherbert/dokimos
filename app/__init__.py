@@ -16,10 +16,13 @@ def create_app(config=config['default']):
     app.config.from_object(config)
 
     login_manager.init_app(app)
+    db.init_app(app)
     migrate.init_app(app, db)
 
     with app.app_context():
         from app.admin import admin
+        from app.auth import auth
         app.register_blueprint(admin)
+        app.register_blueprint(auth)
 
     return app
