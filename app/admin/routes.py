@@ -14,7 +14,7 @@ def login():
 
 @admin.route("/")
 def dashboard():
-    return 'Admin dashboard'
+    return render_template('admin/dashboard.html')
 
 
 @admin.route("/users", methods=['GET'])
