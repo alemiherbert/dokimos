@@ -1,5 +1,6 @@
 from app import db
-from sqlalchemy import Column, Integer, String, Boolean
+from datetime import datetime, timezone
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
 
 
 class User(db.Model):
@@ -10,4 +11,18 @@ class User(db.Model):
     email = Column(String(64), index=True, nullable=False)
     password_hash = Column(String(128))
 
-    is_active = Column(Boolean)
+    status = Column(String(32), default=True)
+    date_joined = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'email': self.email,
+            'status': self.status,
+            'date_joined': self.date_joined
+        }
+
+    def __repr__(self):
+        return f"<User {self.email}>"
