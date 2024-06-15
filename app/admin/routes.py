@@ -17,9 +17,20 @@ def dashboard():
     return 'Admin dashboard'
 
 
-@admin.route("/users")
-def users():
-    return 'User management'
+@admin.route("/users", methods=['GET'])
+def users_all():
+    try:
+        users = db.session.scalars(select(User)).all()
+        users_data = [{'id': user.id,
+                       'email': user.email,
+                       'firstname': user.firstname,
+                       'lastname': user.lastname,
+                       'status': user.status,
+                       'date_joined': user.date_joined
+                       } for user in users]
+        return jsonify(users_data), 200
+    except Exception as e:
+        abort(500, f'An unexpected error occurred: {str(e)}')
 
 
 @admin.route("/users/add-new", methods=['POST'])
