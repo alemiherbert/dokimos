@@ -1,4 +1,10 @@
+from app import db
 from app.admin import admin
+from app.models import User
+
+from sqlalchemy import select
+from flask import jsonify, abort, render_template, request
+from email_validator import validate_email, EmailNotValidError
 
 
 @admin.route("/login")
@@ -16,24 +22,89 @@ def users():
     return 'User management'
 
 
-@admin.route("/users/add-new")
-def create_user():
-    return 'Create user'
+@admin.route("/users/add-new", methods=['POST'])
+def user_create():
+    try:
+        json_data = request.get_json()
+        if not json_data:
+            abort(400, 'Invalid JSON')
+
+        email = json_data.get('email')
+        firstname = json_data.get('firstname')
+        lastname = json_data.get('lastname')
+        if not (email and firstname and lastname):
+            abort(400, 'Email, firstname, and lastname are required')
+
+        validate_email(email)
+        user = db.session.scalar(select(User).where(User.email == email))
+        if user:
+            abort(400, 'User already exists')
+
+        new_user = User(email=email)
+        db.session.add(new_user)
+        db.session.commit()
+
+        return jsonify({'message': 'User created successfully'}), 201
+
+    except EmailNotValidError:
+        abort(400, 'Invalid email address')
+    except Exception as e:
+        abort(500, 'An unexpected error occurred: {}'.format(str(e)))
 
 
-@admin.route("/users/<int:user_id>")
-def view_user(user_id):
-    return f'View user {user_id}'
+@admin.route("/users/<int:user_id>", methods=['GET'])
+def user(user_id):
+    user = db.session.scalar(select(User).where(User.id == user_id))
+    if not user:
+        abort(404, 'User not found')
+    return jsonify(user.to_dict())
 
 
-@admin.route("/users/<int:user_id>/edit")
-def edit_user(user_id):
-    return f'Edit user {user_id}'
+@admin.route("/users/<int:user_id>/", methods=['PUT'])
+def user_edit(user_id):
+    json_data = request.get_json()
+    if not json_data:
+        abort(400, 'Invalid JSON')
+
+    email = json_data.get('email')
+    firstname = json_data.get('firstname')
+    lastname = json_data.get('lastname')
+
+    if email:
+        try:
+            validate_email(email)
+        except EmailNotValidError:
+            abort(400, 'Invalid email address')
+
+        # Check if the email already exists in another user
+        existing_user = db.session.scalar(select(User).where(User.email == email, User.id != user_id))
+        if existing_user:
+            abort(400, 'Email already exists')
+
+    user = db.session.scalar(select(User).where(User.id == user_id))
+    if not user:
+        abort(404, 'User not found')
+
+    if email:
+        user.email = email
+    if firstname:
+        user.firstname = firstname
+    if lastname:
+        user.lastname = lastname
+
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully'}), 200
 
 
-@admin.route("/users/<int:user_id>/delete")
-def delete_user(user_id):
-    return f'Delete user {user_id}'
+@admin.route("/users/<int:user_id>/", methods=['DELETE'])
+def user_delete(user_id):
+    user = db.session.scalar(select(User).where(User.id == user_id))
+    if not user:
+        abort(404, 'User not found')
+
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({'message': 'User deleted successfully'}), 200
 
 
 @admin.route("/equipment")
