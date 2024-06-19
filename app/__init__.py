@@ -20,9 +20,11 @@ def create_app(config=config['default']):
     migrate.init_app(app, db)
 
     with app.app_context():
-        from app.admin import admin
+        from app.api import api
         from app.auth import auth
-        app.register_blueprint(admin)
+        from app.main import main
+        app.register_blueprint(api)
         app.register_blueprint(auth)
+        app.register_blueprint(main)
 
     return app

@@ -3,6 +3,7 @@ from os import environ, path
 
 class BaseConfig:
     """Base configuration"""
+    ITEMS_PER_TABLE = 10
     SECRET_KEY = environ.get('SECRET_KEY') or 'a really hard to guess string'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL') or \

@@ -1,10 +1,32 @@
 from app import db
+from flask import url_for
 from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class User(db.Model):
+class PaginatedAPIMixin:
+    @staticmethod
+    def to_table_dict(query, page, per_page, endpoint, **kwargs):
+        pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+        data = {
+            "items": [item.to_dict() for item in pagination.items],
+            "_meta": {
+                "page": page,
+                "per_page": per_page,
+                "total_pages": pagination.pages,
+                "total_items": pagination.total
+            },
+            "_links": {
+                "self": url_for(endpoint, page=page, per_page=per_page, **kwargs),
+                "next": url_for(endpoint, page=page + 1, per_page=per_page, **kwargs) if pagination.has_next else None,
+                "prev": url_for(endpoint, page=page - 1, per_page=per_page, **kwargs) if pagination.has_prev else None
+            }
+        }
+        return data
+
+
+class User(PaginatedAPIMixin, db.Model):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     firstname = Column(String(32), nullable=False)
@@ -12,7 +34,7 @@ class User(db.Model):
     email = Column(String(64), index=True, nullable=False)
     password_hash = Column(String(128))
 
-    status = Column(String(32), default=True)
+    status = Column(String(32), default="active")
     date_joined = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     def to_dict(self, include_email=False):
@@ -20,11 +42,10 @@ class User(db.Model):
             "id": self.id,
             "firstname": self.firstname,
             "lastname": self.lastname,
+            "email": self.email,
             "status": self.status,
             "date_joined": self.date_joined
         }
-        if include_email:
-            data["email"] = self.email
         return data
 
     def from_dict(self, data, new_user=False):
