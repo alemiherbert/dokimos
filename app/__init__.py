@@ -14,6 +14,7 @@ login_manager = LoginManager()
 def create_app(config=config['default']):
     app = Flask(__name__)
     app.config.from_object(config)
+    app.url_map.strict_slashes = False
 
     login_manager.init_app(app)
     db.init_app(app)
