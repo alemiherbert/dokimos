@@ -1,7 +1,8 @@
 from app import db
 from flask import url_for
-from datetime import datetime, timezone
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from secrets import token_hex
+from datetime import datetime, timezone, timedelta
+from sqlalchemy import select, Column, Integer, String, DateTime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -32,10 +33,12 @@ class User(PaginatedAPIMixin, db.Model):
     firstname = Column(String(32), nullable=False)
     lastname = Column(String(32), nullable=False)
     email = Column(String(64), index=True, nullable=False)
-    password_hash = Column(String(128))
-
     status = Column(String(32), default="active")
     date_joined = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    password_hash = Column(String(128))
+    token = Column(String(32), index=True, unique=True)
+    token_expiration = Column(DateTime)
 
     def to_dict(self, include_email=False):
         data = {
@@ -61,6 +64,27 @@ class User(PaginatedAPIMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def get_token(self, expires_in=3600):
+        now = datetime.now(timezone.utc)
+        if self.token and self.token_expiration:
+            if self.token_expiration.replace(tzinfo=timezone.utc) > now + timedelta(seconds=60):
+                return self.token
+        self.token = token_hex(16)
+        self.token_expiration = now + timedelta(seconds=expires_in)
+        db.session.add(self)
+        return self.token
+
+    def revoke_token(self):
+        self.token_expiration = datetime.now(timezone.utc) - timedelta(seconds=1)
+
+    @staticmethod
+    def check_token(token):
+        user = db.session.scalar(select(User).where(User.token == token))
+        if user is None or user.token_expiration.replace(
+                tzinfo=timezone.utc) < datetime.now(timezone.utc):
+            return None
+        return user
 
     def __repr__(self):
         return f"<User {self.email}>"

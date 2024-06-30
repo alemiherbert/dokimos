@@ -2,12 +2,14 @@ from app import db
 from app.api import api
 from app.models import User
 from app.api.errors import error_response
+from app.api.auth import token_auth
 from sqlalchemy import select
 from flask import jsonify, request
 from email_validator import validate_email, EmailNotValidError
 
 
 @api.route("/users", methods=["GET"])
+@token_auth.login_required
 def users_get():
     try:
         page = request.args.get("page", 1, type=int)

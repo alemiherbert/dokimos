@@ -6,4 +6,4 @@ api = Blueprint(
     template_folder='templates',
     url_prefix='/api')
 
-from app.api import routes, errors
+from app.api import routes, errors, auth
