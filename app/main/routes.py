@@ -5,12 +5,7 @@ from flask import request, render_template
 
 @main.route("/")
 def index():
-    return "/web root"
-
-
-@main.route("/dashboard")
-def dashboard():
-    tabs = {
+    """tabs = {
         "overview": "dashboard/overview.html",
         "users": "dashboard/users.html",
         "inventory": "dashboard/inventory.html",
@@ -21,4 +16,5 @@ def dashboard():
     }
     tab = request.args.get("tab")
     active_tab = tab if tab in tabs else "overview"
-    return render_template(tabs[active_tab], active_tab=active_tab, tabs_list=tabs.keys())
+    return render_template(tabs[active_tab], active_tab=active_tab, tabs_list=tabs.keys())"""
+    return {}
