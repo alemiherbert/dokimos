@@ -24,8 +24,10 @@ def create_app(config=config['default']):
         from app.api import api
         from app.auth import auth
         from app.main import main
+        from app.dashboard import dash
         app.register_blueprint(api)
         app.register_blueprint(auth)
         app.register_blueprint(main)
+        app.register_blueprint(dash)
 
     return app
