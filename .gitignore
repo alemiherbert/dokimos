@@ -3,4 +3,3 @@ __pycache__/
 .flaskenv
 migrations/
 *sqlite3
-node_modules/

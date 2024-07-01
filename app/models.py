@@ -81,7 +81,8 @@ class User(PaginatedAPIMixin, db.Model):
     @staticmethod
     def check_token(token):
         user = db.session.scalar(select(User).where(User.token == token))
-        if user is None or user.token_expiration.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
+        if user is None or user.token_expiration.replace(
+                tzinfo=timezone.utc) < datetime.now(timezone.utc):
             return None
         return user
 
