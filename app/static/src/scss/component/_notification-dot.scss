@@ -1,0 +1,40 @@
+@use 'sprucecss/scss/spruce' as *;
+
+.notification-dot {
+  --size: 1em;
+  background-color: color('success', 'alert');
+  block-size: calc(var(--size) / 2);
+  border-radius: 50%;
+  display: inline-flex;
+  inline-size: calc(var(--size) / 2);
+  position: relative;
+
+  &::before {
+    animation: pulse 1s ease-out;
+    animation-iteration-count: infinite;
+    block-size: var(--size);
+    border: 3px solid color('success', 'alert');
+    border-radius: 50%;
+    content: '';
+    inline-size: var(--size);
+    inset: calc(var(--size) / 4 * -1) auto auto calc(var(--size) / 4 * -1);
+    opacity: 0;
+    position: absolute;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0;
+    scale: 10%;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    scale: 105%;
+  }
+}
