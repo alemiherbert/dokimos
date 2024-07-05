@@ -1,0 +1,63 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+    <div class="l-main">
+        <div class="l-main__sidebar" :class="{ 'l-main__sidebar--open': sidebarOpen }">
+            {% include "partial/sidebar.html" %}
+        </div>
+        <main id="content" class="l-main__body" data-item="body">
+            {% include "partial/header.html" %}
+            {% set heading = {
+                'title': title,
+                'description': 'Hey Adam, welcome back! Here is your personal dashboard.',
+                'actions': [{
+                    'label': 'Orders',
+                    'link': '/orders/',
+                    'icon': './src/img/icon/shopping-cart.svg',
+                    'class': 'btn btn--outline-primary btn--icon'
+                }]
+            } %}
+            {% include "partial/heading.html" %}
+            <div class="container">
+                <div class="app-body">
+                    <div class="l-row l-row--column:sm:2 l-row--column:lg:3">
+                        {% set widget = {
+                            'class': 'app-widget--primary',
+                            'trendingType': 'up',
+                            'trendingData': '+12%',
+                            'chartTitle': 'Orders',
+                            'chartData': '65',
+                            'chartId': 'chart01'
+                        } %}
+                        {% include 'partial/widget/chart.html' %}
+
+                        {% set widget = {
+                            'class': null,
+                            'trendingType': 'up',
+                            'trendingData': '+6%',
+                            'chartTitle': 'Customers',
+                            'chartData': '54',
+                            'chartId': 'chart02'
+                        } %}
+                        {% include 'partial/widget/chart.html' %}
+
+                        {% set widget = {
+                            'class': null,
+                            'trendingType': 'down',
+                            'trendingData': '-12%',
+                            'chartTitle': 'Users',
+                            'chartData': '184',
+                            'chartId': 'chart03'
+                        } %}
+                        {% include 'partial/widget/chart.html' %}
+                    </div>
+                    <div class="l-row l-row--column:sm:2 l-row--column:md:1 l-row--column:lg:2">
+                        {% include 'partial/card/orders-chart.html' %}
+                        {% include 'partial/card/active-users-chart.html' %}
+                    </div>
+                </div>
+            </div>
+            {% include "partial/footer.html" %}
+        </main>
+    </div>
+{% endblock %}

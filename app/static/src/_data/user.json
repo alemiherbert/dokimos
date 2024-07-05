@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Account",
+    "url": "/account/"
+  },
+  {
+    "title": "Settings",
+    "url": "/settings/"
+  },
+  {
+    "title": "Log Out",
+    "url": "/sign-in"
+  }
+]

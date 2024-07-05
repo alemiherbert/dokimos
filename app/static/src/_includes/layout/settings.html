@@ -1,0 +1,36 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+    <div class="l-main">
+        <div class="l-main__sidebar" :class="{ 'l-main__sidebar--open': sidebarOpen }">
+            {% include "partial/sidebar.html" %}
+        </div>
+        <main id="content" class="l-main__body" data-item="body">
+            {% include "partial/header.html" %}
+            {% set heading = {
+                'title': title
+            } %}
+            {% include "partial/heading.html" %}
+            <div class="container">
+                <div class="app-body">
+                    <div class="l-row l-row--column:sm:2 l-row--column:lg:3">
+                        {% for setting in settings %}
+                            <div class="app-card app-card--setting">
+                                <div class="app-card__body">
+                                    <div class="app-card__content">
+                                        <h2 class="app-card__title">{{ setting.title }}</h2>
+                                        <p class="app-card__description">{{ setting.description }}</p>
+                                    </div>
+                                    <div class="app-card__actions">
+                                        <a href="{{ setting.url }}" class="btn btn--outline-primary btn--sm">Edit</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% include "partial/footer.html" %}
+        </main>
+    </div>
+{% endblock %}

@@ -1,0 +1,42 @@
+<div class="app-heading">
+    <div class="container">
+        <div class="app-heading__inner">
+            <div class="app-heading__caption">
+                <h1 class="app-heading__title">Loading Shovels</h1>
+                <div class="app-heading__description">
+                    <p>Ranging from 16–36 tonnes and available Country-wide for short and long-term rental, with or without an operator.</p>
+                </div>
+            </div>
+            <div class="app-card__actions">
+                <form class="search-form" @submit.prevent>
+                    <i data-feather="search" class="btn--icon"></i>
+                    <input x-model="search" class="search-form__control" type="text" placeholder="Search..." title="Search" />
+                </form>
+                <div class="data-table-filter" x-data="{ open: false }" @click.outside="open = false">
+                    <button class="btn btn--primary btn--icon btn--counter data-table-filter__toggle btn--small-padding"
+                        :aria-expanded="open" @click="open = ! open" aria-label="Filters">
+                        <i data-feather="filter" class="sort-btn__icon"></i>
+                        <span class="btn__counter" x-show="filters.length > 0" x-text="filters.length">2</span>
+                    </button>
+                    <div class="context-menu context-menu--inline-end" :data-state="open ? 'open' : 'closed'">
+                        <form @submit.prevent="submitForm(formData)"
+                            class="form-group-stack form-group-stack--bordered form-group-container">
+                            <div class="form-group">
+                                <label class="form-label" for="categories-select">Categories</label>
+                                <select class="form-control" id="categories-select" x-model="formData.status">
+                                    <option>All</option>
+                                    <option>In stock</option>
+                                    <option>Out of stock</option>
+                                </select>
+                            </div>
+                            <div class="data-table-filter__actions">
+                                <button class="btn btn--primary btn--sm">Filter</button>
+                                <button @click="filters = []" type="reset" class="btn btn--light btn--sm">Reset</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

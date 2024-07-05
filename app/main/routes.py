@@ -5,20 +5,19 @@ from flask import request, render_template
 
 @main.route("/")
 def index():
-    return "/web root"
+    return render_template("main/layouts/index.html")
 
 
-@main.route("/dashboard")
-def dashboard():
-    tabs = {
-        "overview": "dashboard/overview.html",
-        "users": "dashboard/users.html",
-        "inventory": "dashboard/inventory.html",
-        "rentals": "dashboard/rentals.html",
-        "invoices": "dashboard/invoices.html",
-        "maintenance": "dashboard/maintenance.html",
-        "reports": "dashboard/reports.html"
-    }
-    tab = request.args.get("tab")
-    active_tab = tab if tab in tabs else "overview"
-    return render_template(tabs[active_tab], active_tab=active_tab, tabs_list=tabs.keys())
+@main.route("/equipment")
+def show_equipment():
+    return render_template("main/layouts/show_equipment.html")
+
+
+@main.route("/equipment/excavator-2")
+def show_single_equipment():
+    return render_template("main/layouts/show_single_equipment.html")
+
+
+@main.route("/categories")
+def show_categories():
+    return render_template("main/layouts/show_categories.html")

@@ -1,0 +1,18 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "sass-dev": "sass --load-path=node_modules --watch --update --style=expanded src/scss:dist/css",
+    "sass-prod": "sass --load-path=node_modules --no-source-map --style=compressed src/scss:dist/css"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "sass": "^1.77.6"
+  },
+  "dependencies": {
+    "sprucecss": "^2.3.1"
+  }
+}

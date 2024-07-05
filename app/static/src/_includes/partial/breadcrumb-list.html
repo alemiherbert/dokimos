@@ -1,0 +1,13 @@
+{% if breadcrumbs %}
+    <ol class="breadcrumb-list {{ breadcrumbClass }}">
+        {% for breadcrumb in breadcrumbs %}
+            <li>
+                {% if breadcrumb.url %}
+                    <a href="{{ breadcrumb.url }}">{{ breadcrumb.caption }}</a>
+                {% else %}
+                    <span aria-current="page">{{ breadcrumb.caption }}</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+{% endif %}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <script src="{{ url_for('static', filename='dist/js/theme-detection.js') }}"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/style.css')}}">
+
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+    <a class="btn btn--primary skip-link" href="#content">Skip to content</a>
+    {% include "main/partial/header.html" %}
+
+    <main id="content" class="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include "main/partial/footer.html" %}
+    <!-- Some of these might need replacing-->
+    <script>feather.replace()</script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="{{ url_for('static', filename='dist/js/theme-switcher.js') }}"></script>
+</body>
+
+</html>

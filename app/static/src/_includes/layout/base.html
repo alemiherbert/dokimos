@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <script src="/js/theme-detection.js"></script>
+        {% include "partial/preload.html" %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        {% include "partial/meta.html" %}
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body x-data="{
+            notificationOpen: false,
+            sidebarOpen: false,
+            search: {
+                blank: false,
+                count: window.search.length,
+                items: window.search,
+                open: false,
+                term: '',
+                show() {
+                    this.search.open = true;
+                    setTimeout(() => $focus.focus($refs.searchInput), 250);
+                },
+                close() {
+                    this.search.open = false;
+                    $refs.searchOpen.focus();
+                },
+                filteredItems() {
+                    if (this.search.term === '') {
+                        return this.search.items;
+                    }
+                    const result = this.search.items.filter((item) => {
+                        return item.caption
+                            .replace(/ /g, '')
+                            .toLowerCase()
+                            .includes(this.search.term.replace(/ /g, '').toLowerCase());
+                    });
+                    this.search.blank = result.length === 0;
+                    this.search.count = result.length;
+                    return result;
+                }
+            }
+        }"
+    >
+        <a class="btn btn--primary skip-link" href="#content">Skip to content</a>
+
+        {% block content %}{% endblock %}
+
+        {% include 'partial/notifications.html' %}
+
+        <script defer src="/js/data/search.js"></script>
+        <script defer src="/js/data/orders.js"></script>
+        <script defer src="/js/data/products.js"></script>
+        <script defer src="/js/data/customers.js"></script>
+        <script defer src="/js/data/categories.js"></script>
+        <script defer src="/js/data-table.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script defer src="/js/theme-switcher.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script src="/js/charts.js" type="module"></script>
+    </body>
+</html>

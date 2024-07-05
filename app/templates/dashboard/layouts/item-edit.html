@@ -1,0 +1,181 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+    <div class="l-main">
+        <div class="l-main__sidebar" :class="{ 'l-main__sidebar--open': sidebarOpen }">
+            {% include "partial/sidebar.html" %}
+        </div>
+        <main id="content" class="l-main__body" data-item="body">
+            {% include "partial/header.html" %}
+            {% set heading = {
+                'title': title,
+                'actions': [{
+                    'label': 'View item',
+                    'link': '/item/view/',
+                    'icon': './src/img/icon/eye.svg',
+                    'class': 'btn btn--primary btn--icon'
+                }]
+            } %}
+            {% include "partial/heading.html" %}
+            <div class="container">
+                <div class="app-body">
+                    <div class="l-row l-row--sidebar">
+                        <div class="l-row__column">
+                            <div class="app-card app-card--edit">
+                                <div class="app-card__header">
+                                    <h2 class="app-card__title">General</h2>
+                                </div>
+                                <div class="app-card__body">
+                                    <div class="form-group-stack form-group-stack--bordered form-group-container">
+                                        <div class="form-group--row">
+                                            <label class="form-label" for="product-name">Name <span class="required-marker" aria-label="Required">*</span></label>
+                                            <input class="form-control" id="product-name" name="product-name" type="text"/>
+                                            <span class="form-description">Just a help text for presentation purpose</span>
+                                        </div>
+                                        <div class="form-group--row">
+                                            <label class="form-label" for="product-category">Category</label>
+                                            <select class="form-control" id="product-category">
+                                                <option value="shoes">Shoes</option>
+                                                <option value="caps">Caps</option>
+                                                <option value="jacket">Jacket</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group--row">
+                                            {% set range = {
+                                                'label': 'Stock',
+                                                'id': 'product-stock',
+                                                'value': 40,
+                                                'step': 1,
+                                                'min': 1,
+                                                'max': 100,
+                                                'prefix': null,
+                                                'suffix': 'piece'
+                                            } %}
+                                            {% include "partial/form/range.html" %}
+                                        </div>
+                                        <div class="form-group--row">
+                                            <label class="form-label" for="product-brand">Brand</label>
+                                            <select class="form-control" id="product-brand">
+                                                <option value="shoes">Nike</option>
+                                                <option value="caps">Adidas</option>
+                                                <option value="jacket">Puma</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group--row">
+                                            {% include "partial/form/file-group.html" %}
+                                        </div>
+                                        <div class="form-group--row form-group--row:vertical-start">
+                                            {% include "partial/form/editor.html" %}
+                                        </div>
+                                        <div class="form-group--row">
+                                            {% include "partial/form/file-list.html" %}
+                                        </div>
+                                        <div class="form-group--row">
+                                            {% include "partial/form/file-list-variant.html" %}
+                                        </div>
+                                        {% include "partial/form/combobox.html" %}
+                                        <div class="form-group--row">
+                                            <span class="form-label">Modal</span>
+                                            {% include "partial/modal.html" %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="app-card app-card--edit">
+                                <div class="app-card__header">
+                                    <h2 class="app-card__title">Repeater</h2>
+                                </div>
+                                <div class="app-card__body">
+                                    <div class="form-group">
+                                        {% include "partial/form/repeater.html" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="app-card app-card--edit">
+                                <div class="app-card__header">
+                                    <h2 class="app-card__title">Metadata</h2>
+                                </div>
+                                <div class="app-card__body">
+                                    <div class="form-group-stack form-group-stack--bordered form-group-container">
+                                        <div class="form-group--row">
+                                            <label class="form-label" for="product-weight">Weight</label>
+                                            <input class="form-control" id="product-weight" name="product-weight" type="text"/>
+                                        </div>
+                                        <div class="form-group--row">
+                                            <label class="form-label" for="product-composition">Composition</label>
+                                            <input class="form-control" id="product-composition" name="product-composition" type="text"/>
+                                        </div>
+                                        <div class="form-group--row">
+                                            <label class="form-label" for="product-color">Color</label>
+                                            <input class="form-control" id="product-color" name="product-color" type="color" value="#6524d6"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="app-card app-card--edit">
+                                <div class="app-card__header">
+                                    <h2 class="app-card__title">SEO</h2>
+                                </div>
+                                <div class="app-card__body">
+                                    <div class="form-group-stack form-group-stack--bordered form-group-container">
+                                        <div class="form-group--row">
+                                            <label class="form-label" for="seo-title">SEO title</label>
+                                            <input class="form-control" id="seo-title" name="seo-title" type="text"/>
+                                        </div>
+                                        <div class="form-group--row">
+                                            <label class="form-label" for="seo-description">SEO description</label>
+                                            <textarea class="form-control" id="seo-description" name="seo-description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="l-row__column">
+                            <div class="app-card app-card--edit">
+                                <div class="app-card__header">
+                                    <h2 class="app-card__title">Settings</h2>
+                                </div>
+                                <div class="app-card__body">
+                                    <div class="form-group-stack">
+                                        <div class="form-group--row">
+                                            <label class="form-label" for="product-price">Price</label>
+                                            <div class="form-group--stacked">
+                                                <div class="form-group-label">$</div>
+                                                <input class="form-control" id="product-price" name="product-price" type="text"/>
+                                                <div class="form-group-label">.00</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="product-status">Status</label>
+                                            <select class="form-control" id="product-status">
+                                                <option value="in-stock">In stock</option>
+                                                <option value="can-be-ordered">Can be ordered</option>
+                                                <option value="not-available">Not available</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-switch form-switch--sm">
+                                                <input class="form-switch__control" type="checkbox" value="true" checked/>
+                                                <span class="form-label form-switch__label">Visible</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="app-actions app-actions--sidebar">
+                        <div class="app-actions__column">
+                            <button class="btn btn--primary">Save</button>
+                            <button class="btn btn--light">Cancel</button>
+                        </div>
+                        <div class="app-actions__column">
+                            <button class="btn btn--delete">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% include "partial/footer.html" %}
+        </main>
+    </div>
+{% endblock %}

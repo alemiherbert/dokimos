@@ -1,0 +1,11 @@
+<div class="app-card__header container">
+    <div class="app-card__breadcrumb">
+        <ol class="breadcrumb-list {{ breadcrumbClass }}">
+            {% for breadcrumb in ['Equipment', 'All'] %}
+            <li>
+                <a href="{{ breadcrumb }}">{{ breadcrumb }}</a>
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>

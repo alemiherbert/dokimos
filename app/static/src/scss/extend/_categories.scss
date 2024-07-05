@@ -1,0 +1,20 @@
+@use 'sprucecss/scss/spruce' as *;
+
+.categories {
+  &__inner {
+    $this: &;
+  }
+
+  &__items {
+    @include layout-grid('m', 15rem);
+  }
+
+  &-item {
+    background-color: cornflowerblue;
+    min-height: 10rem;
+  }
+  &__title h2{
+    font-weight: 600;
+    font-size: responsive-font-size(2rem, 18, '3vw + 0.75rem');
+  }
+}

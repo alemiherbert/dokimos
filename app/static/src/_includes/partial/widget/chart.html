@@ -1,0 +1,19 @@
+<div class="app-widget {{ widget.class }}">
+    <div class="app-widget__column">
+        <h2 class="app-widget__title">{{ widget.chartTitle }}</h2>
+        <p class="app-widget__data">{{ widget.chartData }}</p>
+        {% if widget.trendingData %}
+            <div class="trending trending--{{ widget.trendingType }} app-widget__trending">
+                <span class="trending__caption">{{ widget.trendingData }}</span>
+                {% if widget.trendingType == 'up' %}
+                    {% svgIcon './src/img/icon/trending-up.svg', 'trending__icon' %}
+                {% else %}
+                    {% svgIcon './src/img/icon/trending-down.svg', 'trending__icon' %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="app-widget__chart">
+        <div id="{{ widget.chartId }}"></div>
+    </div>
+</div>

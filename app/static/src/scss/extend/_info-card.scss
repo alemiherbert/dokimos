@@ -1,0 +1,63 @@
+@use 'sprucecss/scss/spruce' as *;
+
+.info-cards{
+  @include layout-grid('m', 15rem);
+}
+
+.info-card {
+  $this: &;
+
+  @include a11y-card-link('.info-card__link', true);
+  @include transition;
+  @include layout-grid('m', 15rem);
+  border: 1px solid color('border');
+  color: color('text');
+  display: flex;
+  flex-direction: column;
+  gap: spacer('m');
+
+  img{
+    min-height: 100%;
+    min-width: 100%;
+    object-fit: cover;
+  }
+
+  &__thumbnail {
+    flex-grow: 1;
+    clip-path: polygon(0 0,100% 0,100% 100%,0 calc(100% - 2rem));
+    height: 15rem;
+  }
+
+  &:hover {
+    img {
+      filter: sepia(87.5%);
+    }
+    transform: translateY(-0.25rem);
+  }
+
+  > * {
+    margin-block: 0;
+  }
+
+  &__caption {
+    min-height: 10rem;
+    @include layout-stack('s');
+    clip-path: polygon(0 0,100% 2rem,100% 100%,0 100%);
+    margin-top: -3.60rem;
+    background-color: color('background', 'header');
+  }
+
+  &__title {
+    @include transition;
+    font-weight: 400;
+
+    a {
+      color: color('heading');
+      text-decoration: none;
+    }
+  }
+
+  &__link {
+    margin-block-start: auto;
+  }
+}

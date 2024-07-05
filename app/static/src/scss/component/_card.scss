@@ -76,13 +76,11 @@
 
   &__header {
     align-items: center;
-    border-block-end: 1px solid color('border');
     display: flex;
     flex-wrap: wrap;
     gap: spacer('xs') spacer('m');
     justify-content: space-between;
     min-block-size: 3.4rem;
-    padding: 0.75rem spacer('s');
   }
 
   &__actions {

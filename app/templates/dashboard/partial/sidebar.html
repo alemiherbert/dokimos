@@ -1,0 +1,27 @@
+<aside @keyup.escape.window="sidebarOpen = false" class="app-sidebar" x-trap.noscroll="sidebarOpen">
+    <div class="app-sidebar__header">
+        <a class="app-sidebar__logo" href="/" aria-label="{ site.name }"> <!-- braces removed-->
+            <i data-feather="home" class="app-sidebar__icon"></i>
+        </a>
+        <div class="app-sidebar__search">
+            {% include "dashboard/partial/search-toggle.html" %}
+        </div>
+        <button :aria-expanded="sidebarOpen" @click="sidebarOpen = false" aria-label="Close navigation"
+            class="btn btn--outline-dark btn--sm btn--icon display--none:md"><i data-feather="x" class="btn__icon"></i>
+        </button>
+    </div>
+    <div class="app-sidebar__body">
+            <nav class="block-navigation__menu block-navigation__menu--breakout">
+                <ul>
+                    {% for tab in tabs.items() %}
+                    <li>
+                        <a class="{% if tab[0] == active_tab %} active {% endif %}" href="/dashboard?tab={{ tab[0] }}">
+                            <i data-feather="{{tab[1]['icon']}}" class="tab__icon"></i>
+                            {{ tab[1]["name"] }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+    </div>
+</aside>

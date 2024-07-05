@@ -1,0 +1,56 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+    <div class="l-main">
+        <div class="l-main__sidebar" :class="{ 'l-main__sidebar--open': sidebarOpen }">
+            {% include "partial/sidebar.html" %}
+        </div>
+        <main id="content" class="l-main__body" data-item="body">
+            {% include "partial/header.html" %}
+            {% set heading = {
+                'title': title,
+                'actions': [{
+                    'label': 'Add new product',
+                    'link': '/item/edit/',
+                    'icon': './src/img/icon/plus.svg',
+                    'class': 'btn btn--primary btn--icon'
+                }]
+            } %}
+            {% include "partial/heading.html" %}
+            <div class="container">
+                <div class="app-body">
+                    <div class="l-row l-row--stretch l-row--column:sm:2 l-row--column:lg:3">
+                        {% set widget = {
+                            'class': 'app-widget--summary',
+                            'icon': './src/img/icon/shopping-bag.svg',
+                            'trendingType': 'up',
+                            'trendingData': '+12%',
+                            'chartTitle': 'Total Products',
+                            'chartData': '341'
+                        } %}
+                        {% include 'partial/widget/summary.html' %}
+                        {% set widget = {
+                            'class': 'app-widget--summary',
+                            'icon': './src/img/icon/archive.svg',
+                            'trendingType': 'up',
+                            'trendingData': null,
+                            'chartTitle': 'Total Inventory',
+                            'chartData': '2,340'
+                        } %}
+                        {% include 'partial/widget/summary.html' %}
+                        {% set widget = {
+                            'class': 'app-widget--summary app-widget--small-data',
+                            'icon': './src/img/icon/star.svg',
+                            'trendingData': null,
+                            'chartTitle': 'Best Selling',
+                            'chartData': 'ZephyrFit Fitness Tracker'
+                        } %}
+                        {% include 'partial/widget/summary.html' %}
+                    </div>
+                    {% include 'partial/data-table/products.html' %}
+                </div>
+            </div>
+            {% include "partial/footer.html" %}
+        </main>
+    </div>
+{% endblock %}

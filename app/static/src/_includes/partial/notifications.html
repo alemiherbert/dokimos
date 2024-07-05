@@ -1,0 +1,68 @@
+<div class="app-notification" x-cloak>
+    <div
+        @click="notificationOpen = ! notificationOpen;"
+        @keyup.escape.window="notificationOpen = false"
+        class="app-notification__backdrop"
+        x-transition
+        x-show="notificationOpen"
+    ></div>
+    <div
+        :data-state="notificationOpen ? 'open' : 'closed'"
+        class="app-notification__drawer"
+        x-transition
+        x-trap="notificationOpen"
+    >
+        <div class="app-notification__header">
+            <h2 class="app-notification__title">Notifications</h2>
+            <button
+                class="btn btn--sm btn--icon btn--light"
+                aria-label="Close modal"
+                @click="notificationOpen = false"
+            >
+                {% svgIcon './src/img/icon/close.svg', 'btn__icon' %}
+            </button>
+        </div>
+        <div class="app-notification__list">
+            {% for notification in notifications %}
+                <div
+                    :class="notificationOpen ? 'notification-card--open' : ''"
+                    class="notification-card notification-card--{{ notification.status }}"
+                    x-data="{ notificationOpen: false }"
+                >
+                    <div class="notification-card__header">
+                        <div class="notification-card__icon notification-card__icon--{{ notification.type }}">
+                            {% svgIcon notification.icon %}
+                        </div>
+                        <div class="notification-card__caption">
+                            <h3 id="notification-{{ loop.index }}" class="notification-card__title">
+                                {% if  notification.status == 'unread' %}
+                                    <span class="notification-dot"></span>
+                                {% endif %}
+                                {{ notification.title }}
+                            </h3>
+                            <p>{{ notification.timestamp | date }}</p>
+                        </div>
+                        {% if notification.body %}
+                            <button
+                                @click="notificationOpen = ! notificationOpen"
+                                aria-label="Toggle notification"
+                                aria-describedby="notification-{{ loop.index }}"
+                                class="btn btn--primary btn--sm btn--icon notification-card__control"
+                            >
+                                {% svgIcon './src/img/icon/plus.svg', 'btn__icon' %}
+                            </button>
+                        {% endif %}
+                    </div>
+                    {% if notification.body %}
+                        <div class="notification-card__body" :aria-hidden="notificationOpen ? 'false' : 'true'">
+                            <div>
+                                {{ notification.body | safe }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <a href="#" class="btn btn--primary btn--block">View all notifications</a>
+    </div>
+</div>

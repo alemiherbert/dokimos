@@ -1,0 +1,26 @@
+<div class="app-heading">
+    <div class="container">
+        <div class="app-heading__inner">
+            <div class="app-heading__caption">
+                <h1 class="app-heading__title">{{ heading.title }}</h1>
+                {% if heading.description %}
+                    <div class="app-heading__description">
+                        <p>{{ heading.description }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            {% if heading.actions %}
+                <div class="app-heading__actions">
+                    {% for action in heading.actions %}
+                        <a href="{{ action.link }}" class="{{ action.class }}">
+                            {% if action.icon %}
+                                {% svgIcon action.icon, 'btn__icon' %}
+                            {% endif %}
+                            {{ action.label }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

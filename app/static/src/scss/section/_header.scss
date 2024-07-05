@@ -17,7 +17,6 @@
     flex-wrap: wrap;
     gap: spacer-clamp('s', 'l');
     justify-content: space-between;
-    margin-inline: get-css-variable(--container-gap);
   }
 
   &__column {

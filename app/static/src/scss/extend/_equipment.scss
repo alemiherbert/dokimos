@@ -1,0 +1,106 @@
+@use 'sprucecss/scss/spruce' as *;
+
+.l-equipment {
+  &__inner {
+    @include layout-stack(spacer-clamp('xl', 'xxl'));
+  }
+}
+
+.equipment {
+  $this: &;
+
+  align-items: center;
+  display: grid;
+  gap: spacer('l') spacer('xl');
+  grid-template-columns: minmax(0, 1fr);
+
+  &--start {
+    @include breakpoint('md') {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    }
+  }
+
+  &--end {
+    @include breakpoint('md') {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+
+      #{$this}__thumbnail {
+        order: 1;
+      }
+    }
+  }
+
+  &__thumbnail {
+    aspect-ratio: 3 / 1.75;
+    border-radius: 0px;
+  }
+
+  &__caption {
+    @include layout-stack('s');
+  }
+
+  &__title {
+    font-size: responsive-font-size(2rem, 18, '3vw + 0.75rem');
+  }
+
+  &__order{
+    display: flex;
+    flex-direction: column;
+    gap: spacer('m');
+  }
+}
+
+@include generate-form-control(
+  '.number-group',
+  false,
+  false,
+  false
+);
+
+.number-group {
+  @include set-css-variable((
+    --padding: 0.25em,
+  ));
+
+  align-items: center;
+  display: inline-flex;
+  gap: spacer('xxs');
+  inline-size: auto;
+  position: relative;
+
+  &:focus-within {
+    @include short-ring('input');
+  }
+
+  &__input {
+    background-color: transparent;
+    border: 0;
+    color: color('text', 'form');
+    font-size: config('font-size', $form-control);
+    font-weight: config('font-weight', $form-control);
+    inline-size: 100%;
+    line-height: config('line-height', $form-control);
+    outline: 0;
+    padding: 0;
+    text-align: center;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  }
+
+  &__increment, &__decrement{
+    padding: 4px !important;
+    svg{
+      width:  1.375rem;
+      height: 1.25rem;
+    }
+  }
+}
+
+.form-group-horizontal {
+  display: flex;
+  gap: spacer('m');
+}

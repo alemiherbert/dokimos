@@ -1,0 +1,65 @@
+<aside
+    @keyup.escape.window="sidebarOpen = false"
+    class="app-sidebar"
+    x-trap.noscroll="sidebarOpen"
+>
+    <div class="app-sidebar__header">
+        <a class="app-sidebar__logo" href="/" aria-label="{{ site.name }}">
+            {% svgIcon './src/img/root-logo.svg' %}
+        </a>
+        <div class="app-sidebar__search">
+            {% include "partial/search-toggle.html" %}
+        </div>
+        <button
+            :aria-expanded="sidebarOpen"
+            @click="sidebarOpen = false"
+            aria-label="Close navigation"
+            class="btn btn--outline-dark btn--sm btn--icon display--none:md"
+        >
+            {% svgIcon './src/img/icon/close.svg', 'btn__icon' %}
+        </button>
+    </div>
+    <div class="app-sidebar__body">
+        {% for block in navigation %}
+            <div
+                class="block-navigation"
+                x-data="{ open: {{ helpers.getLinkActiveParent(block, page.url) | safe }} }"
+            >
+                {% if block.title %}
+                    <h3 class="block-navigation__title">
+                        {{ block.title }}
+                        <button
+                            class="btn btn--light btn--sm btn--icon block-navigation__toggle"
+                            aria-label="Toggle navigation"
+                            :aria-expanded="open"
+                            @click="open = ! open"
+                            x-cloak
+                        >
+                            {% svgIcon './src/img/icon/chevron-up.svg', 'btn__icon' %}
+                        </button>
+                    </h3>
+                {% endif %}
+                <nav
+                    class="block-navigation__menu block-navigation__menu--breakout"
+                    data-state="{{ helpers.getLinkActiveParent(block, page.url, false) | safe }}"
+                    :data-state="open ? 'open' : 'closed'"
+                >
+                    <ul>
+                        {% for item in block.items %}
+                            {% if item.visible %}
+                                <li>
+                                    <a href="{{ item.url }}" {{ helpers.getLinkActiveState(item.url, page.url) | safe }}>
+                                        {% if item.icon %}
+                                            {% svgIcon item.icon %}
+                                        {% endif %}
+                                        {{ item.caption }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        {% endfor %}
+    </div>
+</aside>

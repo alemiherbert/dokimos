@@ -1,0 +1,54 @@
+{% extends "main/base.html" %}
+{% block content %}
+{% include "main/partial/breadcrumb.html" %}
+<div class="l-equipment">
+    <div class="container">
+        <div class="l-equipment__inner">
+            <div class="equipment equipment--end">
+                <img class="equipment__thumbnail"
+                    src="https://ui.sprucecss.com/img/post/cover/mahbod-akhzami-xW7L8MnnBdA-unsplash.jpg" alt="" />
+                <div class="equipment__caption">
+                    <h2 class="equipment__title">Excavator for Hire</h2>
+                    <p>Our excavator is equipped with the latest technology and is operated by experienced
+                        professionals. It can handle various tasks such as digging, trenching, and demolition.</p>
+                    <p class="lead">Price: Ugx 500,000 per day</p>
+                    <form action="" class="equipment__order">
+                        <div class="form-group-horizontal">
+                            <div class=" form-group equipment__order--location">
+                                <label class="form-label" for="location">Location</label>
+                                <input class="form-control" placeholder="Kampala CBD" id="location" name="location"
+                                    type="text" />
+                            </div>
+                            <div class="form-group equipment__order--days">
+                                <label class="form-label" for="days">Days</label>
+                                <div x-cloak class="number-group" x-data="{ quantity: 1, min: 1, max: 99 }"
+                                    x-init="$watch('quantity', (value) => { quantity = value < min ? min : (value > max ? max : value) })">
+                                    <button class="btn btn--primary btn--sm btn--icon number-group__decrement"
+                                        type="button" data-action="decrement" aria-label="Decrement quantity"
+                                        @click="quantity = Math.max(min, --quantity)">
+                                        <i data-feather="minus" class="sign"></i>
+
+                                    </button>
+                                    <input class="number-group__input" x-model="quantity" type="number" :min="min"
+                                        :max="max" />
+                                    <button class="btn btn--primary btn--sm btn--icon number-group__increment"
+                                        type="button" data-action="increment" aria-label="Increment quantity"
+                                        @click="quantity = Math.min(max, ++quantity)">
+                                        <i data-feather="plus" class="sign"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <input class="btn btn--secondary" type="submit" value="Order now" />
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="spacer"></div>
+{% endblock %}
