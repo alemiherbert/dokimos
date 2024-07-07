@@ -2,7 +2,8 @@ from app import db
 from flask import url_for
 from secrets import token_hex
 from datetime import datetime, timezone, timedelta
-from sqlalchemy import select, Column, Integer, String, DateTime
+from sqlalchemy.orm import relationship
+from sqlalchemy import select, Column, Integer, String, DateTime, ForeignKey
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -88,3 +89,44 @@ class User(PaginatedAPIMixin, db.Model):
 
     def __repr__(self):
         return f"<User {self.email}>"
+
+
+class Equipment(PaginatedAPIMixin, db.Model):
+    __tablename__ = "equipment"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(32), nullable=False)
+    location = Column(String(32), nullable=False)
+    slug = Column(String(64), index=True)
+    description = Column(String(192), nullable=False)
+    category_id = Column(Integer, ForeignKey('categories.id'))
+    image_url = Column(String(256), nullable=True)
+
+    def to_dict(self):
+        data = {
+            "category": self.category.name,
+            "description": self.description,
+            "id": self.id,
+            "location": self.location,
+            "name": self.name,
+            "slug": self.slug,
+            "image_url": self.image_url,
+        }
+        return data
+
+    def generate_slug(self):
+        self.slug = self.name.replace(' ', '-').lower()
+
+    def __repr__(self):
+        return f"<Equipment {self.name}>"
+
+
+class Category(PaginatedAPIMixin, db.Model):
+    __tablename__ = "categories"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(32), nullable=False)
+    slug = Column(String(64), index=True)
+    description = Column(String(192), nullable=False)
+    equipment = relationship('Equipment', backref='category', lazy='dynamic')
+
+    def generate_slug(self):
+        self.slug = self.name.replace(' ', '-').lower()

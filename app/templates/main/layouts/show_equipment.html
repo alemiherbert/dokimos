@@ -1,10 +1,10 @@
 {% extends "main/base.html" %}
 {% block content %}
-{% include "main/partial/breadcrumb.html" %}
-
-{% include "main/partial/heading.html" %}
-{% include "main/partial/product-cards.html" %}
+<div x-data="displayEquipment" x-init="init()">
+    {% include "main/partial/breadcrumb.html" %}
+    {% include "main/partial/heading.html" %}
+    {% include "main/partial/product-cards.html" %}
+</div>
 {% include "main/partial/pagination.html" %}
-
 <div class="spacer"></div>
 {% endblock %}

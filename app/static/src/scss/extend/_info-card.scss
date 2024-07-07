@@ -1,7 +1,9 @@
 @use 'sprucecss/scss/spruce' as *;
 
-.info-cards{
-  @include layout-grid('m', 15rem);
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  grid-gap: 1rem;
 }
 
 .info-card {
@@ -16,7 +18,18 @@
   flex-direction: column;
   gap: spacer('m');
 
-  img{
+  &--empty{
+    border: none;
+    padding: spacer('xl');
+    background-image: linear-gradient(45deg, color('background', 'header') 25%, transparent 25%, transparent 50%, color('background', 'header') 50%, color('background', 'header') 75%, transparent 75%, transparent 100%);
+    background-size: 200px 200px;
+
+    a {
+      cursor: pointer;
+    }
+  }
+
+  img {
     min-height: 100%;
     min-width: 100%;
     object-fit: cover;
@@ -24,27 +37,52 @@
 
   &__thumbnail {
     flex-grow: 1;
-    clip-path: polygon(0 0,100% 0,100% 100%,0 calc(100% - 2rem));
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 2rem));
     height: 15rem;
   }
 
   &:hover {
     img {
-      filter: sepia(87.5%);
+      filter: sepia(67.5%);
     }
+
     transform: translateY(-0.25rem);
   }
 
-  > * {
+  >* {
     margin-block: 0;
   }
 
   &__caption {
-    min-height: 10rem;
+    height: 15rem;
     @include layout-stack('s');
-    clip-path: polygon(0 0,100% 2rem,100% 100%,0 100%);
+    clip-path: polygon(0 0, 100% 2rem, 100% 100%, 0 100%);
     margin-top: -3.60rem;
     background-color: color('background', 'header');
+    padding: calc(spacer('l') * 0.75) spacer('m') spacer('m') spacer('m');
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__category {
+    span {
+      font-size: 0.675rem;
+      text-transform: uppercase;
+      color: color('primary');
+    }
+  }
+
+  &__lead {
+    flex-grow: 1;
+    margin: 0px;
+    > * {
+      margin: 0px;
+    }
+    h3 {
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
 
   &__title {

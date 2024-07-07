@@ -1,28 +1,28 @@
 from app import db
 from app.api import api
-from app.models import User
+from app.models import User, Equipment, Category
 from app.api.errors import error_response
 from app.api.auth import token_auth
 from sqlalchemy import select
-from flask import jsonify, request
+from flask import jsonify, request, send_from_directory
 from email_validator import validate_email, EmailNotValidError
 
 
 @api.route("/users", methods=["GET"])
-@token_auth.login_required
-def users_get():
+# @token_auth.login_required
+def get_users():
     try:
         page = request.args.get("page", 1, type=int)
         per_page = min(request.args.get("per_page", 10, type=int), 15)
         users_query = db.session.query(User)
-        users_dict = User.to_table_dict(users_query, page, per_page, "api.users_get")
+        users_dict = User.to_table_dict(users_query, page, per_page, "api.get_users")
         return jsonify(users_dict), 200
     except ValueError as ve:
         return error_response(400, f"Bad request: {str(ve)}")
 
 
 @api.route("/users/add-new", methods=["POST"])
-def user_create():
+def create_user():
     data = request.get_json()
     if not data:
         return error_response(400, "Invalid JSON")
@@ -42,18 +42,18 @@ def user_create():
         new_user = User(firstname=firstname, lastname=lastname, email=email)
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({"message": "User created successfully"}), 201
+        return jsonify({"message": "User added successfully"}), 201
     return error_response(400, "Required parameters `email`, `firstname` or `lastname` missing")
 
 
 @api.route("/users/<int:user_id>", methods=["GET"])
-def user_get(user_id):
+def get_user(user_id):
     user = db.session.scalar(select(User).where(User.id == user_id))
     return jsonify(user.to_dict()) if user else error_response(404)
 
 
 @api.route("/users/<int:user_id>/", methods=["PUT"])
-def user_edit(user_id):
+def edit_user(user_id):
     data = request.get_json()
     if not data:
         return error_response(400, "Invalid JSON")
@@ -93,7 +93,7 @@ def user_edit(user_id):
 
 
 @api.route("/users/<int:user_id>/", methods=["DELETE"])
-def user_delete(user_id):
+def delete_user(user_id):
     user = db.session.scalar(select(User).where(User.id == user_id))
     if not user:
         return error_response(404, "User not found")
@@ -103,19 +103,62 @@ def user_delete(user_id):
     return jsonify({"message": "User deleted successfully"}), 200
 
 
-@api.route("/equipment")
-def equipment():
-    return "Equipment management"
+@api.route("/equipments", methods=["GET"])
+@api.route("/equipments/<category>", methods=["GET"])
+def get_equipments(category=None):
+    try:
+        page = request.args.get("page", 1, type=int)
+        per_page = request.args.get("per_page", 10, type=int)
+        location = request.args.get("location", "all")
+
+        equipment_query = db.session.query(Equipment)
+
+        if category:
+            if category in [cat.slug for cat in Category.query.all()]:
+                equipment_query = equipment_query.filter(Equipment.category.has(Category.slug == category))
+            elif category == "all":
+                pass
+            else:
+                return error_response(404, "Category not found")
+
+        if location and location != 'all':
+            equipment_query = equipment_query.filter(Equipment.location == location.capitalize())
+
+        equipment_dict = Equipment.to_table_dict(equipment_query, page, per_page, "api.get_equipments")
+        return jsonify(equipment_dict), 200
+
+    except ValueError as ve:
+        return error_response(400, f"Bad request: {str(ve)}")
+    except Exception as e:
+        return error_response(500, f"An error occurred: {str(e)}")
 
 
-@api.route("/equipment/add-new")
+@api.route("/equipment/add-new", methods=["POST"])
 def create_equipment():
-    return "Create equipment"
+    data = request.get_json()
+    if not data:
+        return error_response(400, "Invalid JSON")
+    name = data.get("name")
+    description = data.get("description")
+    category = data.get("category")
+    if name and description and category:
+
+        new_equipment = Equipment(name=name, description=description, category=category)
+        new_equipment.generate_slug()
+        db.session.add(new_equipment)
+        db.session.commit()
+        return jsonify({"message": "Equipment added successfully"}), 201
+    return error_response(400, "Required parameters `name`, `description` or `category` missing")
 
 
-@api.route("/equipment/<int:equipment_id>")
-def view_equipment(equipment_id):
-    return f"View equipment {equipment_id}"
+@api.route("/equipment/<slug>")
+def get_equipment(slug):
+    try:
+        equipment = db.session.scalar(select(Equipment).where(Equipment.id == int(slug)))
+    except ValueError:
+        equipment = db.session.scalar(select(Equipment).where(Equipment.slug == slug))
+    finally:
+        return jsonify(equipment.to_dict()) if equipment else error_response(404)
 
 
 @api.route("/equipment/<int:equipment_id>/edit")
@@ -151,3 +194,8 @@ def edit_category(category_id):
 @api.route("/categories/<int:category_id>/delete")
 def delete_category(category_id):
     return f"Delete category {category_id}"
+
+
+@api.route("/images/<path:filename>")
+def serve_file(filename):
+    send_from_directory("static/dist/img/equipment", filename)

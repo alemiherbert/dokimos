@@ -1,26 +1,45 @@
 <div class="info-cards container">
-    <div class="info-card">
-        <div class="info-card__thumbnail">
-            <img src="https://images.unsplash.com/photo-1597362434494-ed6eb82964ac" alt="">
+    <!-- Show this message if there are no items -->
+    <template x-if="items.length === 0">
+        <div class="info-card info-card--empty">
+            <h2>No equipment available</h2>
+            <p>
+                <template x-if="category !== 'all' && location !== 'all'">
+                    <span>We have no <span x-text="category"></span> in <span x-text="location"
+                            style="text-transform: capitalize;"></span> yet.</span>
+                </template>
+                <template x-if="category !== 'all' && location === 'all'">
+                    <span>We currently have no "<span x-text="category"></span>".</span>
+                </template>
+                <template x-if="category === 'all' && location !== 'all'">
+                    <span>We do not have any equipment in "<span x-text="location"></span>".</span>
+                </template>
+                <template x-if="category === 'all' && location === 'all'">
+                    <span>No equipment available in any category or location.</span>
+                </template>
+            </p>
+            <p>Please check back later or adjust your filters.</p>
+            <div>
+                <a @click="resetFilters"  class="">Go Back</a>
+            </div>
         </div>
-        <div class="info-card__caption">
-
+    </template>
+    <!-- Display items if available -->
+    <template x-for="item in items" :key="item.id">
+        <div class="info-card">
+            <div class="info-card__thumbnail">
+                <img :src="item.image_url" :alt="item.name">
+            </div>
+            <div class="info-card__caption">
+                <div class="info-card__category">
+                    <span x-text="item.category"></span>
+                </div>
+                <div class="info-card__lead">
+                    <h3 x-text="item.name"></h3>
+                    <p x-text="item.description"></p>
+                </div>
+                <a class="btn btn--primary btn--md" :href="/equipment/item.slug">Order</a>
+            </div>
         </div>
-    </div>
-    <div class="info-card">
-        <div class="info-card__thumbnail">
-            <img src="https://images.unsplash.com/photo-1597362434494-ed6eb82964ac" alt="">
-        </div>
-        <div class="info-card__caption">
-
-        </div>
-    </div>
-    <div class="info-card">
-        <div class="info-card__thumbnail">
-            <img src="https://images.unsplash.com/photo-1597362434494-ed6eb82964ac" alt="">
-        </div>
-        <div class="info-card__caption">
-
-        </div>
-    </div>
+    </template>
 </div>

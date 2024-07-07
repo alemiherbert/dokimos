@@ -1,6 +1,6 @@
 from app.main import main
-
-from flask import request, render_template
+from app.models import Equipment
+from flask import request, render_template, url_for
 
 
 @main.route("/")
@@ -10,11 +10,24 @@ def index():
 
 @main.route("/equipment")
 def show_equipment():
-    return render_template("main/layouts/show_equipment.html")
+    locations = list({eq.location for eq in Equipment.query.all()})
+    unique_categories = {}
+    for eq in Equipment.query.all():
+        cat = {"name": eq.category.name, "slug": eq.category.slug}
+        if eq.category.slug not in unique_categories:
+            unique_categories[eq.category.slug] = cat
+    categories = list(unique_categories.values())
+
+    return render_template(
+        "main/layouts/show_equipment.html",
+        data={
+            "locations": locations,
+            "categories": categories,
+        })
 
 
-@main.route("/equipment/excavator-2")
-def show_single_equipment():
+@main.route("/equipment/<slug>")
+def show_single_equipment(slug):
     return render_template("main/layouts/show_single_equipment.html")
 
 
