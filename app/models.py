@@ -103,7 +103,11 @@ class Equipment(PaginatedAPIMixin, db.Model):
 
     def to_dict(self):
         data = {
-            "category": self.category.name,
+            "category": {
+                "name": self.category.name,
+                "description": self.category.description,
+                "slug": self.category.slug,
+            },
             "description": self.description,
             "id": self.id,
             "location": self.location,

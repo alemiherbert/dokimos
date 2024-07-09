@@ -1,9 +1,7 @@
 @use 'sprucecss/scss/spruce' as *;
 
 .info-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-  grid-gap: 1rem;
+  @include layout-grid('m', 20rem);
 }
 
 .info-card {
@@ -38,6 +36,8 @@
   &__thumbnail {
     flex-grow: 1;
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 2rem));
+    background-image: linear-gradient(45deg, color('background', 'header') 25%, transparent 25%, transparent 50%, color('background', 'header') 50%, color('background', 'header') 75%, transparent 75%, transparent 100%);
+    background-size: 100px 100px;
     height: 15rem;
   }
 

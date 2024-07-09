@@ -4541,7 +4541,7 @@ pre[class*=language-]::-webkit-scrollbar-track {
 .equipment {
   align-items: center;
   display: grid;
-  gap: 3rem 4.5rem;
+  gap: 1.5rem;
   grid-template-columns: minmax(0, 1fr);
 }
 @media (min-width: 64em) {
@@ -4560,6 +4560,8 @@ pre[class*=language-]::-webkit-scrollbar-track {
 .equipment__thumbnail {
   aspect-ratio: 3/1.75;
   border-radius: 0px;
+  background-image: linear-gradient(45deg, var(--root-header-color-background) 25%, transparent 25%, transparent 50%, var(--root-header-color-background) 50%, var(--root-header-color-background) 75%, transparent 75%, transparent 100%);
+  background-size: 100px 100px;
 }
 .equipment__caption > * {
   margin-block-end: 0;
@@ -4874,6 +4876,8 @@ legend {
 .info-card__thumbnail {
   flex-grow: 1;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 2rem));
+  background-image: linear-gradient(45deg, var(--root-header-color-background) 25%, transparent 25%, transparent 50%, var(--root-header-color-background) 50%, var(--root-header-color-background) 75%, transparent 75%, transparent 100%);
+  background-size: 100px 100px;
   height: 15rem;
 }
 .info-card:hover {

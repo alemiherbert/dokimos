@@ -1,6 +1,5 @@
-<div class="info-cards container">
-    <!-- Show this message if there are no items -->
-    <template x-if="items.length === 0">
+ <div class="container">
+ <template x-if="items.length === 0">
         <div class="info-card info-card--empty">
             <h2>No equipment available</h2>
             <p>
@@ -24,21 +23,22 @@
             </div>
         </div>
     </template>
-    <!-- Display items if available -->
-    <template x-for="item in items" :key="item.id">
+</div>
+<div class="info-cards container">
+        <template x-for="item in items" :key="item.id">
         <div class="info-card">
             <div class="info-card__thumbnail">
                 <img :src="item.image_url" :alt="item.name">
             </div>
             <div class="info-card__caption">
                 <div class="info-card__category">
-                    <span x-text="item.category"></span>
+                    <span x-text="item.category.name"></span>
                 </div>
                 <div class="info-card__lead">
                     <h3 x-text="item.name"></h3>
                     <p x-text="item.description"></p>
                 </div>
-                <a class="btn btn--primary btn--md" :href="/equipment/item.slug">Order</a>
+                <a class="btn btn--primary btn--md" :href="'/equipment/' + item.slug">Order</a>
             </div>
         </div>
     </template>

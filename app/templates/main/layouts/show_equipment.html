@@ -1,10 +1,25 @@
 {% extends "main/base.html" %}
 {% block content %}
 <div x-data="displayEquipment" x-init="init()">
-    {% include "main/partial/breadcrumb.html" %}
+    <div class="app-card__header container">
+        <div class="app-card__breadcrumb">
+            <ol class="breadcrumb-list {{ breadcrumbClass }}">
+                <li>
+                    <a href="/equipment">Equipment</a>
+                </li>
+                <li>
+                    <a @onclick="updateData(category, location)" style="cursor:pointer"
+                        x-text="kebabToTitleCase(category)"></a>
+                </li>
+            </ol>
+        </div>
+    </div>
     {% include "main/partial/heading.html" %}
     {% include "main/partial/product-cards.html" %}
 </div>
 {% include "main/partial/pagination.html" %}
 <div class="spacer"></div>
+{% endblock %}
+{% block script %}
+<script defer src="{{ url_for('static', filename='dist/js/equipment-list.js') }}"></script>
 {% endblock %}

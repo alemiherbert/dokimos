@@ -11,7 +11,7 @@
 
   align-items: center;
   display: grid;
-  gap: spacer('l') spacer('xl');
+  gap: spacer('m');
   grid-template-columns: minmax(0, 1fr);
 
   &--start {
@@ -33,6 +33,8 @@
   &__thumbnail {
     aspect-ratio: 3 / 1.75;
     border-radius: 0px;
+    background-image: linear-gradient(45deg, color('background', 'header') 25%, transparent 25%, transparent 50%, color('background', 'header') 50%, color('background', 'header') 75%, transparent 75%, transparent 100%);
+    background-size: 100px 100px;
   }
 
   &__caption {

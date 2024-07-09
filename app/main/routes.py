@@ -28,7 +28,8 @@ def show_equipment():
 
 @main.route("/equipment/<slug>")
 def show_single_equipment(slug):
-    return render_template("main/layouts/show_single_equipment.html")
+    equipment = Equipment.query.filter_by(slug=slug).first_or_404()
+    return render_template("main/layouts/show_single_equipment.html", equipment=equipment.to_dict())
 
 
 @main.route("/categories")

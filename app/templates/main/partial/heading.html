@@ -2,11 +2,7 @@
     <div class="container">
         <div class="app-heading__inner">
             <div class="app-heading__caption">
-                <h1 class="app-heading__title">Loading Shovels</h1>
-                <div class="app-heading__description">
-                    <p>Ranging from 16–36 tonnes and available Country-wide for short and long-term rental, with or
-                        without an operator.</p>
-                </div>
+                <h1 class="app-heading__title" x-text="kebabToTitleCase(category)"></h1>
             </div>
             <div class="app-card__actions">
                 <form class="search-form" @submit.prevent="searchEquipment">
@@ -24,7 +20,7 @@
                             class="form-group-stack form-group-stack form-group-container">
                             <div class="form-group">
                                 <label class="form-label" for="categories-select">Categories</label>
-                                <select class="form-control" id="categories-select" x-model="category">
+                                <select class="form-control" id="categories-select" x-model="category" @change="updateData(category, location)">
                                     <option value="all">All</option>
                                     {% for category in data.categories %}
                                     <option value="{{ category.slug }}">{{ category.name }}</option>
@@ -33,7 +29,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="locations-select">Locations</label>
-                                <select class="form-control" id="locations-select" x-model="location">
+                                <select class="form-control" id="locations-select" x-model="location" @change="updateData(category, location)">
                                     <option value="all">All</option>
                                     {% for location in data.locations %}
                                     <option value="{{ location | lower }}">{{ location }}</option>
@@ -41,8 +37,8 @@
                                 </select>
                             </div>
                             <div class="data-table-filter__actions">
-                                <button class="btn btn--primary btn--sm">Update</button>
-                                <button @click="resetFilters" type="button" class="btn btn--light btn--sm">Reset</button>
+                                <button @click="resetFilters" type="button"
+                                    class="btn btn--light btn--sm">Reset</button>
                             </div>
                         </form>
                     </div>
