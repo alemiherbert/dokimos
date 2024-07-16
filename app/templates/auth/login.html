@@ -1,6 +1,6 @@
 {% extends "auth/base.html" %}
 {% block content %}
-<main class="l-auth">
+<main class="l-auth" x-data="signInUser()">
     <div class="l-auth__inner">
         <div class="l-auth__form">
             <a class="l-auth__logo" href="#">
@@ -9,16 +9,19 @@
             <div class="auth-form">
                 <h1 class="auth-form__title">Sign In</h1>
                 <p>Hey there, welcome back!</p>
-                <form method="POST" action="#">
+                <form @submit.prevent="signIn">
                     <div class="form-group-stack">
                         <div class="form-group">
                             <label class="form-label" for="email">Email</label>
-                            <input class="form-control form-control--lg" id="email" type="text" name="email" required="required" autocomplete="off" autofocus="autofocus" />
+                            <input class="form-control form-control--lg" id="email" type="text" name="email"
+                                required="required" autocomplete="off" autofocus="autofocus" x-model="email" />
                         </div>
                         <div class="form-group">
-                            <label class="form-label form-label--space-between" for="password">Password <a href="#">Forgot your password?</a>
+                            <label class="form-label form-label--space-between" for="password">Password <a
+                                    href="#">Forgot your password?</a>
                             </label>
-                            <input class="form-control form-control--lg" id="password" type="password" name="password" required="required" autocomplete="off" />
+                            <input class="form-control form-control--lg" id="password" type="password" name="password"
+                                required="required" autocomplete="off" x-model="password" />
                         </div>
                         <div class="form-group">
                             <label class="form-check form-check--lg" for="remember">
@@ -39,4 +42,42 @@
         <div class="l-auth__sidebar"></div>
     </div>
 </main>
+{% endblock %}
+{% block script %}
+<script defer>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('signInUser', () => ({
+            email: '',
+            password: '',
+            async signIn() {
+                try {
+                    const response = await fetch('/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: this.email,
+                            password: this.password,
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        localStorage.setItem('token', result.token);
+                        const redirectUrl = result.role === 'admin' ? '/dashboard' : document.referrer || '/';
+                        window.location.href = redirectUrl;
+                    } else {
+                        alert('Error: ' + result.error);
+                    }
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            },
+            init() {
+                return;
+            }
+        }));
+    });
+</script>
 {% endblock %}

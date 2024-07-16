@@ -1,5 +1,6 @@
 from app import db
-from app.models import Equipment, Category
+from app.models import Equipment, Category, User
+from datetime import datetime, timezone
 
 # Define the categories
 categories = [
@@ -138,3 +139,14 @@ for equipment in equipment_entries:
         db.session.commit()
         eq.generate_slug()
         db.session.commit()
+
+# Create a user named Alemi for testing
+alemi_user = User(
+    firstname="Alemi",
+    lastname="Test",
+    email="alemi@gmail.com",
+    role="admin"
+)
+alemi_user.set_password("alemi")
+db.session.add(alemi_user)
+db.session.commit()

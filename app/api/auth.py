@@ -52,15 +52,42 @@ def revoke_token():
 @api.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
-    if not data or "email" not in data or "password" not in data:
-        return error_response(400, "email or password missing")
+    email = data.get('email')
+    password = data.get('password')
+    user = User.query.filter_by(email=email).first()
 
-    user = User.query.filter_by(email=data["email"]).first()
-    if not user or not user.check_password(data["password"]):
-        return error_response(401, "Incorrect password")
+    if user is None or not user.check_password(password):
+        return jsonify({'error': 'Invalid email or password'}), 401
 
     token = user.get_token()
-    return jsonify({"token": token}), 200
+    db.session.commit()
+    return jsonify({'token': token, 'role': user.role})
+
+
+@api.route("/signup", methods=["POST"])
+def signup():
+    data = request.get_json()
+    names = data.get("name").split(" ")
+    firstname, lastname = names[0], names[1]
+    email = data.get("email")
+    password = data.get("password")
+
+    if not firstname or not lastname or not email or not password:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    existing_user = User.query.filter_by(email=email).first()
+    if existing_user:
+        return jsonify({"error": "User already exists"}), 400
+
+    new_user = User(firstname=firstname, lastname=lastname, email=email)
+    new_user.set_password(password)
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    token = new_user.get_token()
+
+    return jsonify({"message": "User created successfully", "token": token}), 201
 
 
 @api.route("/logout", methods=["POST"])

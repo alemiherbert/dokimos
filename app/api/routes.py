@@ -197,7 +197,7 @@ def delete_category(category_id):
 
 
 @api.route("/cart/add/<int:equipment_id>", methods=["POST"])
-# @token_auth.login_required
+@token_auth.login_required
 def add_to_cart_endpoint(equipment_id):
     user = token_auth.current_user()
     equipment = db.session.scalar(select(Equipment).where(Equipment.id == equipment_id))
@@ -206,7 +206,7 @@ def add_to_cart_endpoint(equipment_id):
 
 
 @api.route("/cart/remove/<int:equipment_id>", methods=["POST"])
-# @token_auth.login_required
+@token_auth.login_required
 def remove_from_cart_endpoint(equipment_id):
     user = token_auth.current_user()
     equipment = db.session.scalar(select(Equipment).where(Equipment.id == equipment_id))
@@ -215,7 +215,7 @@ def remove_from_cart_endpoint(equipment_id):
 
 
 @api.route("/cart/view", methods=["GET"])
-# @token_auth.login_required
+@token_auth.login_required
 def view_cart_endpoint():
     user = token_auth.current_user()
     result = view_cart(user)
@@ -223,7 +223,7 @@ def view_cart_endpoint():
 
 
 @api.route("/book", methods=["POST"])
-# @token_auth.login_required
+@token_auth.login_required
 def book_equipment_endpoint():
     user = token_auth.current_user()
     result = book_equipment(user)
@@ -231,7 +231,7 @@ def book_equipment_endpoint():
 
 
 @api.route("/booking/cancel/<int:booking_id>", methods=["POST"])
-# @token_auth.login_required
+@token_auth.login_required
 def cancel_booking_endpoint(booking_id):
     user = token_auth.current_user()
     result = cancel_booking(user, booking_id)

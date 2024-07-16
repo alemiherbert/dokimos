@@ -40,15 +40,17 @@ class User(PaginatedAPIMixin, db.Model):
     password_hash = Column(String(128))
     token = Column(String(32), index=True, unique=True)
     token_expiration = Column(DateTime)
+    role = Column(String(64), default='user')
 
     def to_dict(self, include_email=False):
         data = {
             "id": self.id,
+            "date_joined": self.date_joined,
+            "email": self.email,
             "firstname": self.firstname,
             "lastname": self.lastname,
-            "email": self.email,
             "status": self.status,
-            "date_joined": self.date_joined
+            "role": self.role,
         }
         return data
 

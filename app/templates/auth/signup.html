@@ -1,32 +1,36 @@
 {% extends "auth/base.html" %}
 {% block content %}
-<main class="l-auth">
+<main class="l-auth" x-data="signUpUser">
     <div class="l-auth__inner">
         <div class="l-auth__form">
-            <a class="l-auth__logo" href="#">
+            <a class="l-auth__logo" href="/">
                 <img src="https://ui.sprucecss.com/img/cone-logo.svg" alt="Cone" height="48" width="48" />
             </a>
             <div class="auth-form">
                 <h1 class="auth-form__title">Sign Up</h1>
-                <form method="POST" action="#">
+                <form method="POST" @submit.prevent="signUp">
                     <div class="form-group-stack">
                         <div class="form-group">
                             <label class="form-label" for="name">Name</label>
-                            <input class="form-control form-control--lg" id="name" type="text" name="name" required="required" autocomplete="off" autofocus="autofocus" />
+                            <input class="form-control form-control--lg" id="name" type="text" name="name"
+                                required="required" autocomplete="off" autofocus="autofocus" x-model="name" />
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="email">Email</label>
-                            <input class="form-control form-control--lg" id="email" type="text" name="email" required="required" autocomplete="off" autofocus="off" />
+                            <input class="form-control form-control--lg" id="email" type="email" name="email"
+                                required="required" autocomplete="off" x-model="email" />
                         </div>
                         <div class="form-group">
-                            <label class="form-label form-label--space-between" for="password">Password
-                            </label>
-                            <input class="form-control form-control--lg" id="password" type="password" name="password" required="required" autocomplete="off" />
+                            <label class="form-label form-label--space-between" for="password">Password</label>
+                            <input class="form-control form-control--lg" id="password" type="password" name="password"
+                                required="required" autocomplete="off" x-model="password" />
                         </div>
                         <div class="form-group">
-                            <label class="form-label form-label--space-between" for="confirm_password">Confirm Password
-                            </label>
-                            <input class="form-control form-control--lg" id="confirm_password" type="password" name="password" required="required" autocomplete="off" />
+                            <label class="form-label form-label--space-between" for="confirm_password">Confirm
+                                Password</label>
+                            <input class="form-control form-control--lg" id="confirm_password" type="password"
+                                name="confirm_password" required="required" autocomplete="off"
+                                x-model="confirm_password" />
                         </div>
                         <br />
                         <div class="form-group">
@@ -42,4 +46,48 @@
         <div class="l-auth__sidebar"></div>
     </div>
 </main>
+{% endblock %}
+{% block script %}
+<script defer>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('signUpUser', () => ({
+            name: '',
+            email: '',
+            password: '',
+            confirm_password: '',
+            async signUp() {
+                if (this.password !== this.confirm_password) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/api/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: this.name,
+                            email: this.email,
+                            password: this.password,
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        localStorage.setItem('token', result.token);
+                        alert('Sign up successful! Redirecting...');
+                        const redirectUrl = document.referrer || '/';
+                        window.location.href = redirectUrl;
+                    } else {
+                        alert('Error: ' + result.error);
+                    }
+                } catch (error) {
+                    alert('Error:', error);
+                }
+            },
+        }));
+    });
+</script>
 {% endblock %}
