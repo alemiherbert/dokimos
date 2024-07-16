@@ -1,0 +1,42 @@
+{% extends "auth/base.html" %}
+{% block content %}
+<main class="l-auth">
+    <div class="l-auth__inner">
+        <div class="l-auth__form">
+            <a class="l-auth__logo" href="#">
+                <img src="https://ui.sprucecss.com/img/cone-logo.svg" alt="Cone" height="48" width="48" />
+            </a>
+            <div class="auth-form">
+                <h1 class="auth-form__title">Sign In</h1>
+                <p>Hey there, welcome back!</p>
+                <form method="POST" action="#">
+                    <div class="form-group-stack">
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email</label>
+                            <input class="form-control form-control--lg" id="email" type="text" name="email" required="required" autocomplete="off" autofocus="autofocus" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label form-label--space-between" for="password">Password <a href="#">Forgot your password?</a>
+                            </label>
+                            <input class="form-control form-control--lg" id="password" type="password" name="password" required="required" autocomplete="off" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-check form-check--lg" for="remember">
+                                <input class="form-check__control" id="remember" type="checkbox" name="remember" />
+                                <span class="form-label form-check__label">Remember me</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn--primary btn--lg btn--block" type="submit">Sign In</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="l-auth__footer">
+                <p>Not a member? <a href="/signup">Sign up</a></p>
+            </div>
+        </div>
+        <div class="l-auth__sidebar"></div>
+    </div>
+</main>
+{% endblock %}

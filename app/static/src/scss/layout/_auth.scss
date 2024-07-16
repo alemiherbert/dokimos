@@ -16,13 +16,14 @@
   }
 
   &__sidebar {
-    background-image: url('https://conedevel.com/assets/sprucecss/auth-background.png');
+    background-image: url("https://images.unsplash.com/photo-1597362434494-ed6eb82964ac");
     background-position: center;
     background-size: cover;
-    border-radius: 2rem;
     margin-block-end: spacer-clamp('m', 'l');
     margin-inline: spacer-clamp('m', 'l');
     min-block-size: 10rem;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 0 100%);
+
 
     @include breakpoint('md') {
       block-size: calc(100% - 2 * #{spacer('l')});
