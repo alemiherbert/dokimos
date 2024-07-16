@@ -12,16 +12,16 @@
         </ol>
     </div>
 </div>
-<div class="l-equipment" x-data="displaySingleEquipment()" x-init="init()">
+<div class="l-equipment" x-data="displaySingleEquipment({{ equipment.id }})" x-init="init()">
     <div class="container">
         <div class="l-equipment__inner">
             <div class="equipment equipment--end">
-                <img class="equipment__thumbnail" src="" alt="Image" />
+                <img class="equipment__thumbnail" src="{{ equipment.image_url }}" alt="Image" />
                 <div class="equipment__caption">
                     <h2 class="equipment__title">{{ equipment.name }}</h2>
                     <p>{{ equipment.description }}</p>
                     <p class="lead">Total Price: <span x-text="totalPrice"></span></p>
-                    <form @submit.prevent="makeInquiry" class="equipment__order" x-data="{ _days: 1, min: 1, max: 120, userLocation: '' }" x-init="$watch('_days', value => calculateCosts()); $watch('userLocation', value => calculateCosts())">
+                    <form @submit.prevent="makeBooking" class="equipment__order" x-data="{ _days: 1, min: 1, max: 120, userLocation: '' }" x-init="$watch('_days', value => calculateCosts()); $watch('userLocation', value => calculateCosts())">
                         <div class="form-group-horizontal">
                             <div class="form-group equipment__order--location">
                                 <label class="form-label" for="location">Your location</label>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div>
-                            <input class="btn btn--secondary" type="submit" value="Add to cart" />
+                            <input class="btn btn--secondary" type="submit" value="Book now" />
                         </div>
                     </form>
                 </div>

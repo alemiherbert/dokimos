@@ -3,7 +3,7 @@ from flask import url_for
 from secrets import token_hex
 from datetime import datetime, timezone, timedelta
 from sqlalchemy.orm import relationship
-from sqlalchemy import select, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import select, Column, Boolean, Integer, String, DateTime, ForeignKey
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -100,6 +100,7 @@ class Equipment(PaginatedAPIMixin, db.Model):
     description = Column(String(192), nullable=False)
     category_id = Column(Integer, ForeignKey('categories.id'))
     image_url = Column(String(256), nullable=True)
+    available = Column(Boolean, default=True)
 
     def to_dict(self):
         data = {
@@ -114,6 +115,7 @@ class Equipment(PaginatedAPIMixin, db.Model):
             "name": self.name,
             "slug": self.slug,
             "image_url": self.image_url,
+            "available": self.available
         }
         return data
 
@@ -134,3 +136,25 @@ class Category(PaginatedAPIMixin, db.Model):
 
     def generate_slug(self):
         self.slug = self.name.replace(' ', '-').lower()
+
+
+class CartItem(db.Model):
+    __tablename__ = 'cart_items'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    equipment_id = Column(Integer, ForeignKey('equipment.id'), nullable=False)
+
+    user = relationship('User', backref='cart_items')
+    equipment = relationship('Equipment', backref='cart_items')
+
+
+class Booking(db.Model):
+    __tablename__ = 'bookings'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    equipment_id = Column(Integer, ForeignKey('equipment.id'), nullable=False)
+    status = Column(String(32), default='booked')
+    booking_date = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    user = relationship('User', backref='bookings')
+    equipment = relationship('Equipment', backref='bookings')

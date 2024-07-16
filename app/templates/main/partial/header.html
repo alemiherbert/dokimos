@@ -1,18 +1,36 @@
-<header class="app-header">
-    <div class="app-header__inner container">
-        <div class="app-header__site-identity">
-            <a href="/">dokimos</a>
+<header class="site-header">
+    <div class="container">
+        <div class="site-header__inner">
+            <div class="site-header__column">
+                <a class="site-header__logo" href="/">
+                    <img src="https://ui.sprucecss.com/img/cone-logo.svg" alt="Cone" width="48" height="48" />
+                </a>
+                <nav class="site-navigation site-header__navigation" aria-label="Site">
+                    <button class="btn btn--light btn--icon site-navigation__btn" data-action="navigation-toggle" aria-controls="primary-menu" aria-expanded="false" aria-label="Menu" style="padding: 0.375rem;">
+                        <i data-feather="menu"></i>
+                    </button>
+                    <ul class="navigation-menu">
+                        <li>
+                            <a href="#">Services</a>
+                        </li>
+                        <li>
+                            <a href="#">Products</a>
+                        </li>
+                        <li>
+                            <a href="#">About</a>
+                        </li>
+                        <li>
+                            <a href="#">Contact</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="site-header__actions">
+                <a class="btn btn--primary btn--icon" href="#">
+                    <i data-feather="user" ></i>
+                    Log in
+                </a>
+            </div>
         </div>
-        <nav class="app_header site-navigation">
-            <ol class="navbar-list {{ breadcrumbClass }}">
-                <li><a href="/">Portfolio</a></li>
-                <li><a href="/">Equipment</a></li>
-                <li><a href="/">Contact us</a></li>
-            </ol>
-        </nav>
-        <div class="app-header__actions">
-            <button class="btn btn--primary" style="padding: 8px 16px;">Get Started</button>
-        </div>
-
     </div>
 </header>

@@ -1,11 +1,12 @@
 from app import db
 from app.api import api
-from app.models import User, Equipment, Category
-from app.api.errors import error_response
 from app.api.auth import token_auth
-from sqlalchemy import select
-from flask import jsonify, request, send_from_directory
+from app.api.errors import error_response
+from app.api.utils import add_to_cart, remove_from_cart, view_cart, book_equipment, cancel_booking
+from app.models import User, Equipment, Category, CartItem, Booking
 from email_validator import validate_email, EmailNotValidError
+from flask import jsonify, request, send_from_directory
+from sqlalchemy import select
 
 
 @api.route("/users", methods=["GET"])
@@ -142,7 +143,6 @@ def create_equipment():
     description = data.get("description")
     category = data.get("category")
     if name and description and category:
-
         new_equipment = Equipment(name=name, description=description, category=category)
         new_equipment.generate_slug()
         db.session.add(new_equipment)
@@ -194,6 +194,48 @@ def edit_category(category_id):
 @api.route("/categories/<int:category_id>/delete")
 def delete_category(category_id):
     return f"Delete category {category_id}"
+
+
+@api.route("/cart/add/<int:equipment_id>", methods=["POST"])
+# @token_auth.login_required
+def add_to_cart_endpoint(equipment_id):
+    user = token_auth.current_user()
+    equipment = db.session.scalar(select(Equipment).where(Equipment.id == equipment_id))
+    result = add_to_cart(user, equipment)
+    return jsonify(result)
+
+
+@api.route("/cart/remove/<int:equipment_id>", methods=["POST"])
+# @token_auth.login_required
+def remove_from_cart_endpoint(equipment_id):
+    user = token_auth.current_user()
+    equipment = db.session.scalar(select(Equipment).where(Equipment.id == equipment_id))
+    result = remove_from_cart(user, equipment)
+    return jsonify(result)
+
+
+@api.route("/cart/view", methods=["GET"])
+# @token_auth.login_required
+def view_cart_endpoint():
+    user = token_auth.current_user()
+    result = view_cart(user)
+    return jsonify(result)
+
+
+@api.route("/book", methods=["POST"])
+# @token_auth.login_required
+def book_equipment_endpoint():
+    user = token_auth.current_user()
+    result = book_equipment(user)
+    return jsonify(result)
+
+
+@api.route("/booking/cancel/<int:booking_id>", methods=["POST"])
+# @token_auth.login_required
+def cancel_booking_endpoint(booking_id):
+    user = token_auth.current_user()
+    result = cancel_booking(user, booking_id)
+    return jsonify(result)
 
 
 @api.route("/images/<path:filename>")

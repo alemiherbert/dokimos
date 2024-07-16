@@ -1,5 +1,5 @@
 document.addEventListener('alpine:init', () => {
-    Alpine.data('displaySingleEquipment', () => ({
+    Alpine.data('displaySingleEquipment', (equipmentId) => ({
         _days: 1,
         userLocation: '',
         totalPrice: 0,
@@ -15,13 +15,34 @@ document.addEventListener('alpine:init', () => {
             let multiplier = this.locationMultiplier[this.userLocation.toLowerCase()] || 1.0;
             this.totalPrice = Math.floor(basePrice * multiplier);
         },
-        makeInquiry() {
-            // Logic for making an inquiry
-            alert(`Inquiry made for ${this._days} days in ${this.userLocation} with total price ${this.totalPrice}`);
+        async makeBooking() {
+            try {
+                const response = await fetch('/api/book', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming token is stored in localStorage
+                    },
+                    body: JSON.stringify({
+                        equipment_id: equipmentId,
+                        days: this._days,
+                        location: this.userLocation
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Booking successful');
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while booking');
+            }
         },
         init() {
             this.calculateCosts();  // Initial calculation
         }
-
     }));
 });
