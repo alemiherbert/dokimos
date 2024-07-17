@@ -72,6 +72,9 @@
                     }
                 } catch (error) {
                     alert('Error: ' + error.message);
+                } finally {
+                    this.email = '';
+                    this.password = '';
                 }
             },
             init() {
