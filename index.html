@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function () {
+  var stored = localStorage.getItem('theme');
+  var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dokimos Consulting — Infrastructure, Proven.</title>
+<meta name="description" content="Dokimos Consulting is an indigenous Ugandan multidisciplinary engineering firm delivering infrastructure, buildings and architecture, and project advisory services to improve quality of life across Africa.">
+<meta property="og:title" content="Dokimos Consulting — Infrastructure, Proven.">
+<meta property="og:description" content="Infrastructure, buildings, and project delivery for Africa's future.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/images/hero/infrastructure.jpg">
+<meta name="theme-color" content="#12110D">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Libre+Franklin:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-page="home">
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<header class="site-header" id="site-header"></header>
+
+<main id="main-content">
+  <section class="hero" id="hero" aria-label="Introduction"></section>
+  <section class="stats-bar" id="stats-bar" aria-label="Key facts"></section>
+  <section class="section" id="about" aria-label="About Dokimos Consulting"></section>
+  <section class="section" id="services" aria-label="Our services"></section>
+  <section class="section section-dark" id="approach" aria-label="Our approach"></section>
+  <section class="section" id="featured-work" aria-label="Featured work"></section>
+  <section class="section" id="trust" aria-label="Who we work with"></section>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+<div id="cookie-banner"></div>
+
+<noscript>
+  <div style="padding:2rem;font-family:sans-serif;max-width:640px;margin:0 auto;">
+    This site's content requires JavaScript to render. Please enable JavaScript, or contact
+    info@dokimosconsulting.com directly.
+  </div>
+</noscript>
+
+<script src="/js/main.js" defer></script>
+</body>
+</html>

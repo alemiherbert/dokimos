@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function () {
+  var stored = localStorage.getItem('theme');
+  var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Page Not Found — Dokimos Consulting</title>
+<meta name="theme-color" content="#12110D">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Libre+Franklin:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-page="404">
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<header class="site-header" id="site-header"></header>
+
+<main id="main-content">
+  <section class="section notfound" aria-label="Page not found">
+    <div class="container notfound-inner">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="display-heading notfound-heading">Lost in the Field.</h1>
+      <p class="lead">The page you're looking for doesn't exist, has moved, or hasn't been built yet — much like some of the infrastructure we're here to fix.</p>
+      <div class="notfound-actions">
+        <a class="btn btn-accent" href="/">Back to Home</a>
+        <a class="btn btn-outline-dark" href="/work">View Our Work</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+<div id="cookie-banner"></div>
+
+<noscript>
+  <div style="padding:2rem;font-family:sans-serif;max-width:640px;margin:0 auto;">
+    This site's content requires JavaScript to render. Please enable JavaScript, or contact
+    info@dokimosconsulting.com directly.
+  </div>
+</noscript>
+
+<script src="/js/main.js" defer></script>
+</body>
+</html>
