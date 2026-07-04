@@ -1,6 +1,10 @@
 # Partner / client logos
 
-`content.json` → `home.trust.logos[].image` expects these exact files. This section renders on the **Home** page. These are **placeholder slots** — the site does not currently claim any real client relationships; replace the entries in `home.trust.logos` (name + image) with real partners before publishing live, or remove the section entirely if you'd rather not show a logo wall yet.
+`index.html`'s `#trust` `.trust-logo` markup expects these exact files.
+These are **placeholder slots** — the site does not currently claim any
+real client relationships; replace the `.trust-logo` entries (name + image)
+with real partners before publishing live, or remove the section entirely
+if you'd rather not show a logo wall yet.
 
 - partner-1.svg
 - partner-2.svg
