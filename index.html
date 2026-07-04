@@ -22,6 +22,10 @@
 <meta name="twitter:image" content="/assets/images/hero/buildings.webp">
 <meta name="theme-color" content="#12110D">
 <link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="canonical" href="https://dokimos.alemiherbert.workers.dev/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Dokimos Consulting Engineers","description":"Dokimos Consulting is an indigenous Ugandan multidisciplinary engineering firm delivering infrastructure, buildings and architecture, and project advisory services to improve quality of life across Africa.","email":"info@dokimosconsulting.com","telephone":"+256 700 000 000","foundingDate":"2024","address":{"@type":"PostalAddress","addressLocality":"Kampala, Uganda","addressCountry":"UG"},"url":"https://dokimos.alemiherbert.workers.dev"}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Libre+Franklin:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -31,26 +35,369 @@
 <div id="page-shell">
 <a class="skip-link" href="#main-content">Skip to content</a>
 
-<header class="site-header" id="site-header"></header>
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a href="/" class="brand" aria-label="Dokimos Consulting Engineers home">
+      <img src="/logo.svg" alt="" class="brand-mark" width="34" height="34">
+      <span class="brand-name">Dokimos<span class="brand-name-sub">Consulting</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/" aria-current="page">Home</a></li>
+        <li><a href="/work">Work</a></li>
+        <li><a href="/people">People</a></li>
+        <li><a href="/news">News</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a href="/contact" class="btn btn-accent nav-cta">Contact Us</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg>
+      </button>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
 
 <main id="main-content">
-  <section class="hero" id="hero" aria-label="Introduction"></section>
-  <section class="stats-bar" id="stats-bar" aria-label="Key facts"></section>
-  <section class="section" id="about" aria-label="About Dokimos Consulting"></section>
-  <section class="section" id="services" aria-label="Our services"></section>
-  <section class="section section-dark" id="approach" aria-label="Our approach"></section>
-  <section class="section" id="featured-work" aria-label="Featured work"></section>
-  <section class="section" id="trust" aria-label="Who we work with"></section>
+  <section class="hero" id="hero" aria-label="Introduction">
+    <div class="hero-media" id="hero-media">
+      <div class="hero-slide is-active"
+           data-headline="Infrastructure Engineered to Outlast."
+           data-subheadline="Water, transportation, and energy systems designed for growing demand and Africa's toughest conditions."
+           data-href="#service-infrastructure">
+        <div class="media-frame"><img class="js-img" data-path="/assets/images/hero/infrastructure.webp" src="/assets/images/hero/infrastructure.webp" alt="Water, road, and energy infrastructure at golden hour" loading="eager"></div>
+      </div>
+      <div class="hero-slide"
+           data-headline="Structures Proven Before They're Built."
+           data-subheadline="Architectural and structural engineering for facilities held to the same standard as the infrastructure around them."
+           data-href="#service-buildings">
+        <div class="media-frame"><img class="js-img" data-path="/assets/images/hero/buildings.webp" src="/assets/images/hero/buildings.webp" alt="Architectural and structural engineering detail" loading="eager"></div>
+      </div>
+      <div class="hero-slide"
+           data-headline="From Concept to Commissioning."
+           data-subheadline="Project planning and full project delivery oversight so designs survive contact with procurement and the construction site."
+           data-href="#service-advisory">
+        <div class="media-frame"><img class="js-img" data-path="/assets/images/hero/advisory.webp" src="/assets/images/hero/advisory.webp" alt="Construction site supervision and planning" loading="eager"></div>
+      </div>
+    </div>
+    <div class="container hero-bottom">
+      <div class="hero-text">
+        <h1 id="hero-headline">Infrastructure Engineered to Outlast.</h1>
+        <a class="lead" id="hero-subheadline" href="#service-infrastructure">Water, transportation, and energy systems designed for growing demand and Africa's toughest conditions.</a>
+      </div>
+      <div class="hero-carousel" id="hero-carousel">
+        <div class="carousel-bars" id="carousel-bars">
+          <button type="button" class="carousel-bar is-active" data-index="0" aria-label="Show Infrastructure Engineered to Outlast."><span class="carousel-bar-fill"></span></button>
+          <button type="button" class="carousel-bar" data-index="1" aria-label="Show Structures Proven Before They're Built."><span class="carousel-bar-fill"></span></button>
+          <button type="button" class="carousel-bar" data-index="2" aria-label="Show From Concept to Commissioning."><span class="carousel-bar-fill"></span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-bar" id="stats-bar" aria-label="Key facts">
+    <div class="container stats-grid">
+      <div data-reveal>
+        <div class="stat-value">3</div>
+        <div class="stat-label">Integrated Practice Areas</div>
+      </div>
+      <div data-reveal>
+        <div class="stat-value">100%</div>
+        <div class="stat-label">Ugandan-Owned &amp; Led</div>
+      </div>
+      <div data-reveal>
+        <div class="stat-value">4</div>
+        <div class="stat-label">Stage Delivery Lifecycle</div>
+      </div>
+      <div data-reveal>
+        <div class="stat-value">1</div>
+        <div class="stat-label">Focus: Africa's Hardest Problems</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about" aria-label="About Dokimos Consulting">
+    <div class="container">
+      <div class="about-copy">
+        <p class="eyebrow" data-reveal>Who We Are</p>
+        <h2 class="display-heading" data-reveal>Proven, by definition.</h2>
+        <p class="lead" data-reveal>We are an indigenous Ugandan engineering consultancy built on a simple conviction: Africa's infrastructure problems deserve African-led solutions.</p>
+        <p class="body" data-reveal>We work across three integrated practice areas — infrastructure, buildings and architecture, and project advisory and delivery — spanning water, transportation, and energy engineering through to architectural design and full project management.</p>
+      </div>
+      <div class="values-grid">
+        <div class="value-card" data-reveal>
+          <div class="value-index">01</div>
+          <div class="value-title">Proven, Not Promised</div>
+          <p class="value-desc">Every design is stress-tested against real site data, real climate projections, and real budgets before it reaches a client's desk.</p>
+        </div>
+        <div class="value-card" data-reveal>
+          <div class="value-index">02</div>
+          <div class="value-title">Local-First Engineering</div>
+          <p class="value-desc">We design for the materials, labor markets, and maintenance realities of the communities we serve — not the conditions of a foreign template.</p>
+        </div>
+        <div class="value-card" data-reveal>
+          <div class="value-index">03</div>
+          <div class="value-title">Built for Climate Reality</div>
+          <p class="value-desc">Resilience isn't an add-on line item. Flood, drought, and heat projections are built into every water, road, and power design from day one.</p>
+        </div>
+        <div class="value-card" data-reveal>
+          <div class="value-index">04</div>
+          <div class="value-title">Integrity in Every Line Item</div>
+          <p class="value-desc">Transparent costing, honest timelines, and engineering sign-off we're willing to put our name on.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="services" aria-label="Our services">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal>What We Do</p>
+        <h2 class="display-heading" data-reveal>Three practices. One standard.</h2>
+        <p class="lead" data-reveal>Infrastructure, buildings, and delivery aren't separate problems in the communities we serve — they're one connected practice. We design and deliver across all three, held to the same standard of proof.</p>
+      </div>
+      <div class="pillars-grid">
+        <div class="pillar-card" id="service-infrastructure" data-reveal>
+          <div class="pillar-media">
+            <div class="media-frame"><img class="js-img" data-path="/assets/images/services/infrastructure.jpg" src="/assets/images/services/infrastructure.jpg" alt="Water, road, and energy infrastructure" loading="lazy"></div>
+            <div class="pillar-media-overlay">
+              <div class="pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg></div>
+              <h3 class="pillar-name">Infrastructure Engineering</h3>
+              <p class="pillar-summary">Water, transportation, and energy systems engineered for growing demand and unpredictable climate.</p>
+            </div>
+          </div>
+          <ul class="pillar-capabilities">
+            <li>Water treatment &amp; distribution networks</li>
+            <li>Irrigation &amp; watershed management</li>
+            <li>Road, bridge &amp; drainage design</li>
+            <li>Hydroelectric &amp; solar power systems</li>
+            <li>Rural electrification &amp; mini-grids</li>
+            <li>Climate-resilient infrastructure design</li>
+          </ul>
+        </div>
+        <div class="pillar-card" id="service-buildings" data-reveal>
+          <div class="pillar-media">
+            <div class="media-frame"><img class="js-img" data-path="/assets/images/services/buildings.jpg" src="/assets/images/services/buildings.jpg" alt="Architectural and structural engineering detail" loading="lazy"></div>
+            <div class="pillar-media-overlay">
+              <div class="pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="10" width="5" height="11"/><rect x="10" y="4" width="5" height="17"/><rect x="17" y="13" width="4" height="8"/></svg></div>
+              <h3 class="pillar-name">Buildings &amp; Structures</h3>
+              <p class="pillar-summary">Architectural and structural engineering for facilities that have to perform as hard as the infrastructure around them.</p>
+            </div>
+          </div>
+          <ul class="pillar-capabilities">
+            <li>Architectural design &amp; documentation</li>
+            <li>Structural analysis &amp; design (concrete, steel, timber)</li>
+            <li>Foundation &amp; geotechnical design</li>
+            <li>Facility &amp; industrial building design</li>
+            <li>Structural assessment &amp; retrofit</li>
+            <li>Building code &amp; regulatory compliance</li>
+          </ul>
+        </div>
+        <div class="pillar-card" id="service-advisory" data-reveal>
+          <div class="pillar-media">
+            <div class="media-frame"><img class="js-img" data-path="/assets/images/services/advisory.jpg" src="/assets/images/services/advisory.jpg" alt="Construction site supervision and planning" loading="lazy"></div>
+            <div class="pillar-media-overlay">
+              <div class="pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3h6v3H9zM6 6h12v15H6z"/><path d="m9.5 13 2 2 3.5-4"/></svg></div>
+              <h3 class="pillar-name">Advisory &amp; Delivery</h3>
+              <p class="pillar-summary">Planning and delivery discipline that gets a design from concept to a functioning system on the ground.</p>
+            </div>
+          </div>
+          <ul class="pillar-capabilities">
+            <li>Urban &amp; land use master planning</li>
+            <li>Feasibility studies &amp; cost estimation</li>
+            <li>Procurement &amp; contract administration</li>
+            <li>Construction supervision &amp; quality assurance</li>
+            <li>Stakeholder &amp; regulatory coordination</li>
+            <li>Scheduling &amp; risk management</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark" id="approach" aria-label="Our approach">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal>How We Work</p>
+        <h2 class="display-heading" data-reveal>From assessment to a system that sustains itself.</h2>
+        <p class="lead" data-reveal>Infrastructure fails when it's designed for a site visit instead of a lifetime. Our process is built to prevent that.</p>
+      </div>
+      <div class="approach-steps">
+        <div class="step-card" data-reveal>
+          <div class="step-number">01</div>
+          <h3 class="step-title">Assess</h3>
+          <p class="step-desc">Site, hydrology, soil, community need, and climate projections — gathered and verified before a single line is drawn.</p>
+        </div>
+        <div class="step-card" data-reveal>
+          <div class="step-number">02</div>
+          <h3 class="step-title">Design</h3>
+          <p class="step-desc">Engineering grounded in local materials, local labor capacity, and realistic long-term maintenance budgets.</p>
+        </div>
+        <div class="step-card" data-reveal>
+          <div class="step-number">03</div>
+          <h3 class="step-title">Deliver</h3>
+          <p class="step-desc">Rigorous technical oversight through procurement, construction, and commissioning.</p>
+        </div>
+        <div class="step-card" data-reveal>
+          <div class="step-number">04</div>
+          <h3 class="step-title">Sustain</h3>
+          <p class="step-desc">Monitoring plans, maintenance training, and capacity handover so the system outlives the contract.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="featured-work" aria-label="Featured work">
+    <!-- PLACEHOLDER CONTENT: all "Concept" project entries are illustrative
+         studies, not real completed projects. Replace with real project
+         data before launch. Keep this in sync with work/index.html — these
+         4 cards are hand-duplicated from the 6 on the Work page (the
+         featured subset), there's no shared data source anymore.
+         Card order matters: CSS hides the 4th card on desktop via
+         #featured-work .projects-grid .project-card:nth-child(4) (see
+         css/style.css) and shows it only on narrow/mobile screens. -->
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal>Featured Work</p>
+        <h2 class="display-heading" data-reveal>Selected Concepts</h2>
+        <p class="lead" data-reveal>A sample of the sector and scale of work we take on.</p>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card" data-category="Water" data-reveal tabindex="0">
+          <div class="media-frame"><img class="js-img" data-path="/assets/images/projects/kyoga-water-treatment.jpg" src="/assets/images/projects/kyoga-water-treatment.jpg" alt="Water treatment works concept" loading="lazy"></div>
+          <div class="project-overlay">
+            <span class="project-tag">Water</span>
+            <div class="project-title">Kyoga Basin Water Treatment Works</div>
+            <div class="project-meta">Kayunga District, Uganda — Concept</div>
+            <p class="project-desc">A regional treatment and distribution concept sized to serve growing lakeside communities with climate-resilient intake design.</p>
+          </div>
+        </div>
+        <div class="project-card" data-category="Transportation" data-reveal tabindex="0">
+          <div class="media-frame"><img class="js-img" data-path="/assets/images/projects/nile-corridor-road.jpg" src="/assets/images/projects/nile-corridor-road.jpg" alt="Feeder road upgrade concept" loading="lazy"></div>
+          <div class="project-overlay">
+            <span class="project-tag">Transportation</span>
+            <div class="project-title">Nile Corridor Feeder Road Upgrade</div>
+            <div class="project-meta">Buikwe District, Uganda — Concept</div>
+            <p class="project-desc">All-weather feeder road and drainage concept connecting agricultural communities to regional trade routes.</p>
+          </div>
+        </div>
+        <div class="project-card" data-category="Transportation" data-reveal tabindex="0">
+          <div class="media-frame"><img class="js-img" data-path="/assets/images/projects/kampala-drainage-retrofit.jpg" src="/assets/images/projects/kampala-drainage-retrofit.jpg" alt="Urban drainage retrofit concept" loading="lazy"></div>
+          <div class="project-overlay">
+            <span class="project-tag">Transportation</span>
+            <div class="project-title">Kampala Bypass Drainage Resilience Retrofit</div>
+            <div class="project-meta">Kampala, Uganda — Concept</div>
+            <p class="project-desc">A flood-mitigation retrofit concept for urban road corridors prone to seasonal flash flooding.</p>
+          </div>
+        </div>
+        <div class="project-card" data-category="Energy" data-reveal tabindex="0">
+          <div class="media-frame"><img class="js-img" data-path="/assets/images/projects/karamoja-solar.jpg" src="/assets/images/projects/karamoja-solar.jpg" alt="Solar mini-grid concept" loading="lazy"></div>
+          <div class="project-overlay">
+            <span class="project-tag">Energy</span>
+            <div class="project-title">Karamoja Solar Mini-Grid Network</div>
+            <div class="project-meta">Karamoja Sub-region, Uganda — Concept</div>
+            <p class="project-desc">A distributed mini-grid concept bringing reliable power to communities beyond the national grid's economic reach.</p>
+          </div>
+        </div>
+      </div>
+      <a class="btn btn-outline-dark" data-reveal href="/work">View All Work</a>
+    </div>
+  </section>
+
+  <section class="section" id="trust" aria-label="Who we work with">
+    <!-- PLACEHOLDER CONTENT: partner/client logos below are placeholder
+         slots — see assets/images/trust/PUT_IMAGES_HERE.md. Replace with
+         real partners or remove this section before launch. -->
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal>Who We Work With</p>
+        <h2 class="display-heading" data-reveal>Trusted by the people building Africa's infrastructure.</h2>
+        <p class="lead" data-reveal>Government agencies, development partners, and private clients we deliver engineering work for. Logos below are placeholders — see README.md before publishing live.</p>
+      </div>
+      <div class="trust-logos">
+        <div class="trust-logo" data-reveal><div class="media-frame"><img class="js-img" data-path="/assets/images/trust/partner-1.svg" src="/assets/images/trust/partner-1.svg" alt="Partner Organization 1" loading="lazy"></div></div>
+        <div class="trust-logo" data-reveal><div class="media-frame"><img class="js-img" data-path="/assets/images/trust/partner-2.svg" src="/assets/images/trust/partner-2.svg" alt="Partner Organization 2" loading="lazy"></div></div>
+        <div class="trust-logo" data-reveal><div class="media-frame"><img class="js-img" data-path="/assets/images/trust/partner-3.svg" src="/assets/images/trust/partner-3.svg" alt="Partner Organization 3" loading="lazy"></div></div>
+        <div class="trust-logo" data-reveal><div class="media-frame"><img class="js-img" data-path="/assets/images/trust/partner-4.svg" src="/assets/images/trust/partner-4.svg" alt="Partner Organization 4" loading="lazy"></div></div>
+        <div class="trust-logo" data-reveal><div class="media-frame"><img class="js-img" data-path="/assets/images/trust/partner-5.svg" src="/assets/images/trust/partner-5.svg" alt="Partner Organization 5" loading="lazy"></div></div>
+        <div class="trust-logo" data-reveal><div class="media-frame"><img class="js-img" data-path="/assets/images/trust/partner-6.svg" src="/assets/images/trust/partner-6.svg" alt="Partner Organization 6" loading="lazy"></div></div>
+      </div>
+    </div>
+  </section>
 </main>
 
-<footer class="site-footer" id="site-footer"></footer>
-<div id="cookie-banner"></div>
+<footer class="site-footer" id="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">
+          <img src="/logo.svg" alt="" width="34" height="34">
+          <span>Dokimos Consulting Engineers</span>
+        </div>
+        <p class="footer-note">Dokimos Consulting — Indigenous Ugandan engineering, built for Africa's hardest infrastructure problems.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/work">Work</a></li>
+            <li><a href="/people">People</a></li>
+            <li><a href="/news">News</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="mailto:info@dokimosconsulting.com">info@dokimosconsulting.com</a></li>
+            <li>+256 700 000 000</li>
+            <li>Kampala, Uganda</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="footer-year">2026</span> Dokimos Consulting Engineers. All rights reserved.</span>
+      <span>Founded 2024 — Kampala, Uganda</span>
+    </div>
+  </div>
+</footer>
+<div id="cookie-banner">
+  <div class="cookie-banner-inner">
+    <p class="cookie-banner-text">We use cookies to improve your experience on this site and understand how it's used.</p>
+    <div class="cookie-banner-actions">
+      <button type="button" class="btn btn-ghost" id="cookie-decline">Decline</button>
+      <button type="button" class="btn btn-accent" id="cookie-accept">Accept</button>
+    </div>
+  </div>
 </div>
-<div class="mobile-nav-drawer" id="mobile-nav-drawer"></div>
+</div>
+<div class="mobile-nav-drawer" id="mobile-nav-drawer">
+  <a href="/" class="mobile-nav-brand" aria-label="Dokimos Consulting Engineers home">
+    <img src="/logo.svg" alt="" class="brand-mark">
+    <span class="brand-name">Dokimos<small class="brand-name-sub">Consulting</small></span>
+  </a>
+  <ul>
+    <li><a href="/" aria-current="page">Home</a></li>
+    <li><a href="/work">Work</a></li>
+    <li><a href="/people">People</a></li>
+    <li><a href="/news">News</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+  <button type="button" class="mobile-nav-close" aria-label="Close menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg>
+  </button>
+</div>
 
 <noscript>
   <div style="padding:2rem;font-family:sans-serif;max-width:640px;margin:0 auto;">
-    This site's content requires JavaScript to render. Please enable JavaScript, or contact
+    This page works without JavaScript. Enabling it adds dark mode, the mobile menu, and a few animations — or contact
     info@dokimosconsulting.com directly.
   </div>
 </noscript>
