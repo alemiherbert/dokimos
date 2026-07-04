@@ -141,6 +141,18 @@ once the visitor clicks Accept or Decline (`setupCookieBanner()` in
 currently cosmetic — this site doesn't set any tracking cookies itself —
 so wire it up to your actual analytics/consent logic if you add any later.
 
+## Cache-busting js/main.js and css/style.css
+
+`_headers` caches `/js/*` and `/css/*` for 24 hours (`max-age=86400`) with
+no build step to auto-hash filenames. Every page loads them as
+`/js/main.js?v=2` / `/css/style.css?v=2` — **whenever you edit
+`js/main.js` or `css/style.css`, bump that `?v=N` query string in all 6
+HTML files**, or returning visitors' browsers will keep serving the old
+cached copy for up to 24 hours after you deploy (this exact bug shipped
+once already: a stale cached `main.js` kept trying to `fetch()` the
+now-deleted `content.json`). The number itself is arbitrary — it only
+needs to change, not follow any particular scheme.
+
 ## Local preview
 
 Root-relative asset paths (`/css/style.css`, `/js/main.js`, `/logo.svg`)
