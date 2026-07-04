@@ -12,6 +12,6 @@ CONTACT_RECIPIENT = "info.charis.systems@gmail.com"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "dokimos-contacts"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_name = "dokimos-db"
+database_id = "7700d105-2f39-4f06-83b4-cafb434e73b1"
 migrations_dir = "migrations"
