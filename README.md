@@ -216,22 +216,21 @@ HTML with the real posts already in it, no client-side fetch/render step.
 If the table is empty (or the query fails), the page's static placeholder
 cards show through untouched, so the page never looks broken.
 
-Add a post with the CLI script (no dependencies, shells out to
+Manage posts with `scripts/news.js` (no dependencies, shells out to
 `wrangler d1 execute`):
 
 ```
-node scripts/add-news-post.js
+node scripts/news.js list
+node scripts/news.js add                                     (interactive prompts)
+node scripts/news.js add --title "..." --tag "Announcement" --excerpt "..." --image "/assets/images/news/foo.jpg" --alt "..." [--date YYYY-MM-DD]
+node scripts/news.js edit <id> --title "..." [--tag ...] [--date ...] [--excerpt ...] [--image ...] [--alt ...]
+node scripts/news.js delete <id>
 ```
 
-Run with no arguments for interactive prompts, or pass every field as a
-flag for one-shot/scripted use:
-
-```
-node scripts/add-news-post.js --title "..." --tag "Announcement" --excerpt "..." --image "/assets/images/news/foo.jpg" --alt "..." [--date YYYY-MM-DD]
-```
-
-Add `--local --persist-to <path>` (matching whatever you pass to
-`wrangler dev`) to write to your local dev database instead of the live one.
+`edit` only changes the fields you pass — everything else keeps its
+current value. Use `list` to find a post's id. Add `--local --persist-to
+<path>` (matching whatever you pass to `wrangler dev`) to any command to
+target your local dev database instead of the live one.
 
 ## Contact form backend (D1 + email notification)
 
