@@ -8,7 +8,10 @@ binding = "ASSETS"
 not_found_handling = "404-page"
 
 [vars]
-CONTACT_RECIPIENT = "info.charis.systems@gmail.com"
+# Resend's unverified onboarding@resend.dev sender can only deliver to the
+# Resend account's own email until a domain is verified (resend.com/domains).
+# Switch this to info.charis.systems@gmail.com once that's done.
+CONTACT_RECIPIENT = "alemiherbert@gmail.com"
 
 [[d1_databases]]
 binding = "DB"
