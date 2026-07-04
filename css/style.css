@@ -203,7 +203,7 @@ h2.display, .display-heading {
   font-weight: 700;
   font-size: 1.5rem;
   letter-spacing: 0.01em;
-  line-height: 1.1;
+  line-height: 1.25;
   text-transform: uppercase;
   display: flex; flex-direction: column;
 }
@@ -359,7 +359,7 @@ body:not([data-page="home"]) #main-content { padding-top: 24px; }
    ========================================================================== */
 .hero {
   position: relative;
-  min-height: 100svh;
+  min-height: 75svh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -504,7 +504,8 @@ body:not([data-page="home"]) #main-content { padding-top: 24px; }
 }
 .value-index {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 3rem;
+  line-height: 0.85;
   color: var(--blue);
 }
 .value-title {
