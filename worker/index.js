@@ -85,7 +85,6 @@ function newsCardHtml(post) {
         <span class="news-tag">${escapeHtml(post.tag)}</span>
         <h3 class="news-title">${escapeHtml(post.title)}</h3>
         <time class="news-date" datetime="${escapeHtml(post.published_date)}">${escapeHtml(formatDate(post.published_date))}</time>
-        <p class="news-excerpt">${escapeHtml(post.excerpt)}</p>
       </div>
     </article>`;
 }
