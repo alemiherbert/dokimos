@@ -102,6 +102,8 @@ p { margin: 0; }
 }
 .skip-link:focus { left: 0; }
 
+.content-load-error { padding: 4rem 1.5rem; font-family: sans-serif; }
+
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 
 .container {
@@ -839,6 +841,7 @@ body:not([data-page="home"]) #main-content { padding-top: 24px; }
   resize: vertical;
 }
 .form-field input:focus, .form-field textarea:focus { outline: none; border-color: var(--blue); }
+.hp-field { position: absolute; left: -9999px; top: -9999px; }
 .form-note { font-size: 0.82rem; color: var(--ink-faint); margin-top: -0.3rem; }
 .form-note--success { color: var(--blue); }
 .form-note--error { color: #c0392b; }

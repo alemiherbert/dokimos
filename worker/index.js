@@ -3,6 +3,15 @@
  * the /api/contact endpoint (D1 storage + email notification via Resend).
  */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_LENGTHS = { name: 100, email: 254, organization: 200, message: 5000 };
+const DAILY_EMAIL_CAP = 40; // stays well under Resend's free-tier 100/day limit
+const ALLOWED_ORIGINS = [
+  'https://dokimos.alemiherbert.workers.dev',
+  // Add the production custom domain here once it's live, e.g.:
+  // 'https://dokimos.co.ug',
+  'http://localhost:8788', // local `wrangler dev` testing only; harmless in prod since
+                           // a remote attacker's browser can't spoof its own origin as localhost
+];
 
 export default {
   async fetch(request, env, ctx) {
@@ -20,6 +29,20 @@ export default {
 };
 
 async function handleContact(request, env) {
+  const origin = request.headers.get('origin');
+  if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+    return json({ ok: false, error: 'Request origin not allowed.' }, 403);
+  }
+
+  const ip = request.headers.get('cf-connecting-ip') || 'unknown';
+
+  if (env.CONTACT_RATE_LIMITER) {
+    const { success } = await env.CONTACT_RATE_LIMITER.limit({ key: ip });
+    if (!success) {
+      return json({ ok: false, error: 'Too many requests. Please try again in a minute.' }, 429);
+    }
+  }
+
   let data;
   try {
     const contentType = request.headers.get('content-type') || '';
@@ -30,6 +53,12 @@ async function handleContact(request, env) {
     }
   } catch {
     return json({ ok: false, error: 'Invalid request body.' }, 400);
+  }
+
+  // Honeypot: real visitors never fill this hidden field. Pretend success
+  // without touching D1 or sending email, so bots don't learn they were caught.
+  if (String(data.website || '').trim()) {
+    return json({ ok: true });
   }
 
   const name = String(data.name || '').trim();
@@ -43,9 +72,16 @@ async function handleContact(request, env) {
   if (!EMAIL_RE.test(email)) {
     return json({ ok: false, error: 'Please provide a valid email address.' }, 400);
   }
+  if (
+    name.length > MAX_LENGTHS.name ||
+    email.length > MAX_LENGTHS.email ||
+    organization.length > MAX_LENGTHS.organization ||
+    message.length > MAX_LENGTHS.message
+  ) {
+    return json({ ok: false, error: 'One or more fields are too long.' }, 400);
+  }
 
   const createdAt = new Date().toISOString();
-  const ip = request.headers.get('cf-connecting-ip') || '';
 
   try {
     await env.DB.prepare(
@@ -58,7 +94,12 @@ async function handleContact(request, env) {
 
   if (env.RESEND_API_KEY) {
     try {
-      await sendNotificationEmail(env, { name, email, organization, message, createdAt });
+      const sentToday = await countSubmissionsSince(env, last24Hours());
+      if (sentToday <= DAILY_EMAIL_CAP) {
+        await sendNotificationEmail(env, { name, email, organization, message, createdAt });
+      } else {
+        console.warn(`Daily email cap (${DAILY_EMAIL_CAP}) reached; skipping notification for submission at ${createdAt}.`);
+      }
     } catch (err) {
       // The submission is already saved in D1 even if the email fails, so
       // the visitor still gets a success response rather than a false error.
@@ -67,6 +108,17 @@ async function handleContact(request, env) {
   }
 
   return json({ ok: true });
+}
+
+function last24Hours() {
+  return new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+}
+
+async function countSubmissionsSince(env, isoTimestamp) {
+  const row = await env.DB.prepare(
+    `SELECT COUNT(*) AS count FROM contact_submissions WHERE created_at >= ?`
+  ).bind(isoTimestamp).first();
+  return row ? row.count : 0;
 }
 
 async function sendNotificationEmail(env, { name, email, organization, message, createdAt }) {

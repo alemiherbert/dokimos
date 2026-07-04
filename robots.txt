@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dokimos.alemiherbert.workers.dev/sitemap.xml

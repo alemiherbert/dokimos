@@ -429,6 +429,10 @@
           <div class="social-row">${socialLinks}</div>
         </div>
         <form class="contact-form" data-reveal action="${escapeHtml(contact.formAction)}" method="POST">
+          <div class="hp-field" aria-hidden="true">
+            <label for="cf-website">Website</label>
+            <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
           <div class="form-row">
             <div class="form-field">
               <label for="cf-name">Name</label>
@@ -660,6 +664,48 @@
   }
 
   /* ---------------------------------------------------------------------
+   * SEO: canonical link + Organization structured data
+   * ------------------------------------------------------------------- */
+
+  function setupSeoTags(site) {
+    const canonicalHref = window.location.origin + normalizePath(window.location.pathname);
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', canonicalHref);
+
+    const sameAs = Object.values(site.social || {}).filter((href) => href && href !== '#');
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      name: site.name,
+      description: site.metaDescription,
+      email: site.email,
+      telephone: site.phone,
+      foundingDate: String(site.foundedYear),
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: site.addressLine1,
+        addressCountry: 'UG',
+      },
+      url: window.location.origin,
+    };
+    if (sameAs.length) structuredData.sameAs = sameAs;
+
+    let script = document.getElementById('structured-data');
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'structured-data';
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(structuredData);
+  }
+
+  /* ---------------------------------------------------------------------
    * Boot
    * ------------------------------------------------------------------- */
 
@@ -671,7 +717,7 @@
       return res.json();
     })
     .then((data) => {
-      document.title = `${data.site.name} — ${data.site.tagline}`;
+      setupSeoTags(data.site);
 
       renderHeader(data);
       renderMobileNav(data);
@@ -712,7 +758,7 @@
       // so it still displays correctly even if content.json fails to load.
       if (['home', 'work', 'people', 'news', 'contact'].includes(page)) {
         document.getElementById('main-content').innerHTML =
-          '<p style="padding:4rem 1.5rem;font-family:sans-serif;">Site content failed to load. If you are viewing this file directly, run a local server (see README.md) — browsers block content.json from loading over file:// URLs.</p>';
+          '<p class="content-load-error">Site content failed to load. If you are viewing this file directly, run a local server (see README.md) — browsers block content.json from loading over file:// URLs.</p>';
       }
     });
 })();
