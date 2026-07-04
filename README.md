@@ -128,13 +128,23 @@ analytics/consent logic if you add any later.
 Because pages fetch `/content.json` via JavaScript, opening `index.html`
 directly (`file://...`) will fail in most browsers (blocked by CORS), and
 root-relative asset paths won't resolve either. Serve the folder over local
-HTTP instead, e.g.:
+HTTP instead.
+
+Recommended — this repo's own dev server (Python stdlib only, no
+dependencies), which matches Cloudflare Pages' unmatched-path → `404.html`
+behavior and auto-refreshes the browser tab whenever a file changes:
+
+```
+python serve.py 8080
+```
+
+Or, without live reload:
 
 ```
 npx serve .
 ```
 
-or, with Python installed:
+or
 
 ```
 python -m http.server 8080
