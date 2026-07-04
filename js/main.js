@@ -70,16 +70,32 @@
           <ul>${navItems}</ul>
         </nav>
         <div class="header-actions">
-          <a href="/contact" class="btn btn-accent nav-cta">Start a Project</a>
+          <a href="/contact" class="btn btn-accent nav-cta">Contact Us</a>
           <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
             <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
             <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg>
           </button>
           <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
+            <span></span><span></span>
           </button>
         </div>
       </div>`;
+  }
+
+  function renderMobileNav(data) {
+    const el = document.getElementById('mobile-nav-drawer');
+    if (!el) return;
+    const currentPath = normalizePath(window.location.pathname);
+    const navItems = data.nav.map((n) => {
+      const isCurrent = normalizePath(n.href) === currentPath;
+      return `<li><a href="${escapeHtml(n.href)}"${isCurrent ? ' aria-current="page"' : ''}>${escapeHtml(n.label)}</a></li>`;
+    }).join('');
+    el.innerHTML = `
+      <a href="/" class="mobile-nav-brand" aria-label="${escapeHtml(data.site.name)} home">
+        <img src="/logo.svg" alt="" class="brand-mark">
+        <span class="brand-name">${escapeHtml(data.site.shortName)}<small class="brand-name-sub">Consulting</small></span>
+      </a>
+      <ul>${navItems}</ul>`;
   }
 
   function renderFooter(data) {
@@ -454,32 +470,62 @@
 
   function setupNavToggle(page) {
     const toggle = document.getElementById('nav-toggle');
-    const nav = document.getElementById('site-nav');
+    const drawer = document.getElementById('mobile-nav-drawer');
     const header = document.getElementById('site-header');
+    if (!toggle || !drawer) return;
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'mobile-nav-close';
+    closeBtn.setAttribute('aria-label', 'Close menu');
+    closeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+    drawer.insertBefore(closeBtn, drawer.firstChild);
+
     function syncHeaderSolid(open) {
       if (page !== 'home') return;
       if (open) header.classList.add('is-scrolled');
       else if (window.scrollY <= 24) header.classList.remove('is-scrolled');
     }
-    // Lock background scroll while the full-screen mobile nav is open —
-    // otherwise the page scrolls behind the fixed panel and mobile browsers'
-    // collapsing address bar exposes gaps at the top/bottom of the panel.
+    // Lock background scroll while the drawer is open. A plain
+    // `overflow:hidden` on body isn't enough on iOS Safari — it still
+    // rubber-bands the page underneath, which is exactly what exposes gaps
+    // around the pushed content. Pinning body at its current scroll offset
+    // (and restoring it on close) blocks that completely.
+    let lockedScrollY = 0;
     function setScrollLock(locked) {
-      document.documentElement.classList.toggle('nav-scroll-lock', locked);
-      document.body.classList.toggle('nav-scroll-lock', locked);
+      if (locked) {
+        lockedScrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${lockedScrollY}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+      } else {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        window.scrollTo(0, lockedScrollY);
+      }
     }
-    toggle.addEventListener('click', () => {
-      const open = nav.classList.toggle('is-open');
+    function setOpen(open) {
+      document.body.classList.toggle('nav-open', open);
       toggle.setAttribute('aria-expanded', String(open));
       syncHeaderSolid(open);
       setScrollLock(open);
+    }
+    toggle.addEventListener('click', () => {
+      setOpen(!document.body.classList.contains('nav-open'));
     });
-    nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => {
-      nav.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', 'false');
-      syncHeaderSolid(false);
-      setScrollLock(false);
-    }));
+    closeBtn.addEventListener('click', () => setOpen(false));
+    drawer.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    // Clicking outside the drawer (the pushed-aside page, or its dimmed
+    // sliver) closes it too. #page-shell has pointer-events:none while open,
+    // so those clicks already fall through to document — this just catches them.
+    document.addEventListener('click', (e) => {
+      if (!document.body.classList.contains('nav-open')) return;
+      if (drawer.contains(e.target) || toggle.contains(e.target)) return;
+      setOpen(false);
+    });
   }
 
   function setupThemeToggle() {
@@ -586,6 +632,7 @@
       document.title = `${data.site.name} — ${data.site.tagline}`;
 
       renderHeader(data);
+      renderMobileNav(data);
       renderFooter(data);
       setupCookieBanner(data.cookieBanner);
 

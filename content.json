@@ -4,7 +4,7 @@
     "note": "This file drives every piece of text, stat, and image path on the site, split into one namespace per page (home, work, people, news, contact) plus shared site/nav/footer data. Edit values here — no HTML/CSS/JS knowledge required. Sample projects, stats, people, news posts, and trust.logos below are clearly-labeled illustrative placeholders. Review README.md before publishing live, and replace image paths under assets/images/ with real photography, real client/partner logos, and real team/news photos."
   },
   "site": {
-    "name": "Dokimos Consulting",
+    "name": "Dokimos Consulting Engineers",
     "shortName": "Dokimos",
     "tagline": "Infrastructure, Proven.",
     "descriptor": "Infrastructure, buildings, and project delivery for Africa's future.",
@@ -31,24 +31,24 @@
     "hero": {
       "slides": [
         {
-          "image": "/assets/images/hero/infrastructure.jpg",
+          "image": "/assets/images/hero/infrastructure.webp",
           "imageAlt": "Water, road, and energy infrastructure at golden hour",
           "headline": "Infrastructure Engineered to Outlast.",
           "subheadline": "Water, transportation, and energy systems designed for growing demand and Africa's toughest conditions.",
           "href": "#service-infrastructure"
         },
         {
-          "image": "/assets/images/hero/buildings.jpg",
+          "image": "/assets/images/hero/buildings.webp",
           "imageAlt": "Architectural and structural engineering detail",
           "headline": "Structures Proven Before They're Built.",
           "subheadline": "Architectural and structural engineering for facilities held to the same standard as the infrastructure around them.",
           "href": "#service-buildings"
         },
         {
-          "image": "/assets/images/hero/advisory.jpg",
+          "image": "/assets/images/hero/advisory.webp",
           "imageAlt": "Construction site supervision and planning",
           "headline": "From Concept to Commissioning.",
-          "subheadline": "Urban planning and full project delivery oversight so designs survive contact with procurement and the construction site.",
+          "subheadline": "Project planning and full project delivery oversight so designs survive contact with procurement and the construction site.",
           "href": "#service-advisory"
         }
       ]
@@ -63,7 +63,7 @@
       "eyebrow": "Who We Are",
       "heading": "Proven, by definition.",
       "lead": "We are an indigenous Ugandan engineering consultancy built on a simple conviction: Africa's infrastructure problems deserve African-led solutions.",
-      "body": "We work across three integrated practice areas — infrastructure, buildings and architecture, and project advisory and delivery — spanning water, transportation, and energy engineering through to architectural design and full project management. None is an add-on: a design is only as good as the structure that holds it up, the building it serves, and the process that gets it actually built. Every design we deliver is grounded in local materials, local labor, local climate, and long-term maintainability, because infrastructure that can't be sustained by the community it serves was never really solved.",
+      "body": "We work across three integrated practice areas — infrastructure, buildings and architecture, and project advisory and delivery — spanning water, transportation, and energy engineering through to architectural design and full project management.",
       "values": [
         {
           "title": "Proven, Not Promised",
