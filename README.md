@@ -153,35 +153,79 @@ python -m http.server 8080
 Then visit `http://localhost:8080` — try `/work`, `/people`, `/news`,
 `/contact`, and a nonexistent path (to see `404.html`) too.
 
-## Deploying to Cloudflare Pages
+## Deploying to Cloudflare
 
-This is a static site with no build step, and Cloudflare Pages serves
-`<folder>/index.html` at `<folder>/` automatically, plus `404.html` at the
-project root for unmatched paths — no extra routing config needed.
+The site is deployed as a **Cloudflare Worker with Static Assets**
+(`workers.dev` URL: `dokimos.alemiherbert.workers.dev`), connected to this
+repo via **Workers & Pages → Connect to Git** in the Cloudflare dashboard.
+`wrangler.toml` at the project root defines the deployment:
 
-1. Push this folder to a GitHub/GitLab repo (or use Cloudflare's direct
-   upload / Wrangler CLI if you'd rather not use git).
-2. In the Cloudflare dashboard: **Workers & Pages → Create → Pages →
-   Connect to Git**, select the repo.
-3. Build settings:
-   - **Build command:** _(leave blank — none needed)_
-   - **Output directory:** `/`
-4. Deploy. Every future content update (editing `content.json`, adding
-   project images) just needs a new commit/push — Cloudflare redeploys
-   automatically.
+- `[assets]` serves every file in this folder as-is (`directory = "./"`),
+  with `not_found_handling = "404-page"` so unmatched paths serve
+  `404.html`, matching local preview via `serve.py`.
+- `main = "worker/index.js"` is a small Worker script that only intercepts
+  `POST /api/contact` (the contact form backend, see below) — every other
+  request falls through to the static assets untouched.
 
-## Wiring up the contact form
+Every future content update (editing `content.json`, adding project
+images) just needs a new commit/push to `master` — Cloudflare redeploys
+automatically. No build command is needed.
 
-The contact form currently posts to `#` (nowhere) and shows a note saying
-so — `contact.formNote` / `contact.formAction` in `content.json`. Since
-this is a static site, pick a form backend and paste its endpoint into
-`contact.formAction`:
+## Contact form backend (D1 + email notification)
 
-- **Web3Forms** (web3forms.com) — free, no signup wall, just an access key.
-- **Formspree** (formspree.io) — free tier, signup required.
+The contact form (`/contact`) posts JSON to `/api/contact`, handled by
+`worker/index.js`, which:
 
-Once `formAction` points at a real endpoint, delete/blank out
-`contact.formNote` in `content.json`.
+1. Validates the submission and inserts it into a Cloudflare **D1**
+   database (table `contact_submissions`, schema in
+   `migrations/0001_create_contact_submissions.sql`) so nothing is lost
+   even if email delivery fails.
+2. Sends a notification email via the **Resend** API (resend.com) to
+   whatever address is set in `CONTACT_RECIPIENT` (`wrangler.toml`
+   `[vars]`, currently `info.charis.systems@gmail.com`).
+
+### One-time setup (requires Cloudflare/Wrangler login)
+
+```
+npx wrangler login
+npx wrangler d1 create dokimos-contacts
+```
+
+Copy the `database_id` from the output into `wrangler.toml`'s
+`[[d1_databases]]` block (replacing `REPLACE_WITH_D1_DATABASE_ID`), then
+apply the schema:
+
+```
+npx wrangler d1 execute dokimos-contacts --remote --file=migrations/0001_create_contact_submissions.sql
+```
+
+Sign up at resend.com, create an API key, and set it as a Worker secret
+(never commit it — `.dev.vars` is gitignored):
+
+```
+npx wrangler secret put RESEND_API_KEY
+```
+
+For local testing with `wrangler dev`, copy `.dev.vars.example` to
+`.dev.vars` and fill in a real key — `serve.py` cannot run the Worker/D1
+locally, only static files, so use `wrangler dev` to exercise
+`/api/contact` end-to-end:
+
+```
+npx wrangler dev --local --persist-to ../wrangler-persist
+```
+
+`--persist-to` points D1's local SQLite state at a folder *outside* this
+project. Since `[assets] directory = "./"` covers the whole repo,
+`wrangler dev`'s watcher treats every write to that state file as a source
+change and reloads — without `--persist-to` pointed elsewhere, this
+becomes an infinite reload loop.
+
+Resend's `onboarding@resend.dev` sender works without any domain
+verification, which is why it's used as the default `from` address in
+`worker/index.js`. Once a real domain (e.g. `dokimos.co.ug`) is verified
+in Resend, switch the sender to an address on that domain for better
+deliverability.
 
 ## Known trade-off
 
