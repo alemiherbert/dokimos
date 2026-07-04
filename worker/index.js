@@ -49,10 +49,10 @@ async function handleNewsPage(request, env) {
     posts = results;
   } catch (err) {
     console.error('Failed to load news posts from D1:', err);
-    return assetResponse;
+    return noStore(assetResponse);
   }
 
-  if (!posts || posts.length === 0) return assetResponse;
+  if (!posts || posts.length === 0) return noStore(assetResponse);
 
   const cardsHtml = posts.map(newsCardHtml).join('');
   const rewriter = new HTMLRewriter().on('.news-grid', {
@@ -60,7 +60,21 @@ async function handleNewsPage(request, env) {
       el.setInnerContent(cardsHtml, { html: true });
     },
   });
-  return rewriter.transform(assetResponse);
+  return noStore(rewriter.transform(assetResponse));
+}
+
+// This page's content depends on live D1 data that can change at any time
+// (via scripts/news.js) without a new deployment, unlike a normal static
+// asset. Cloudflare's edge otherwise caches it like any other asset
+// response (CF-Cache-Status: HIT even with max-age=0), so every visitor
+// keeps seeing whatever was cached the moment it was last requested after
+// a deploy -- regardless of posts added/edited/deleted since. no-store
+// forces both the edge and the browser to always hit this handler fresh.
+function noStore(response) {
+  const copy = new Response(response.body, response);
+  copy.headers.set('Cache-Control', 'no-store');
+  copy.headers.delete('ETag');
+  return copy;
 }
 
 function newsCardHtml(post) {
