@@ -697,7 +697,7 @@ body:not([data-page="home"]) #main-content { padding-top: 24px; }
 
 .projects-grid, .people-grid, .news-grid {
   display: grid;
-  gap: clamp(1.25rem, 2.5vw, 2rem);
+  gap: clamp(1rem, 2vw, 1.5rem);
 }
 .projects-grid { grid-template-columns: repeat(3, 1fr); }
 .people-grid, .news-grid { grid-template-columns: repeat(4, 1fr); }

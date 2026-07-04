@@ -24,9 +24,69 @@ export default {
       return handleContact(request, env);
     }
 
+    if ((url.pathname === '/news' || url.pathname === '/news/') && request.method === 'GET') {
+      return handleNewsPage(request, env);
+    }
+
     return env.ASSETS.fetch(request);
   },
 };
+
+// Renders news posts from D1 into the static news page server-side, so the
+// response is still plain HTML with no client-side fetch/render step. Falls
+// back to the page's static placeholder cards untouched if D1 has no posts
+// yet or the query fails, rather than showing an empty page.
+async function handleNewsPage(request, env) {
+  const assetResponse = await env.ASSETS.fetch(request);
+  if (!assetResponse.ok) return assetResponse;
+
+  let posts;
+  try {
+    const { results } = await env.DB.prepare(
+      `SELECT title, tag, published_date, excerpt, image, image_alt
+       FROM news_posts ORDER BY published_date DESC, id DESC LIMIT 24`
+    ).all();
+    posts = results;
+  } catch (err) {
+    console.error('Failed to load news posts from D1:', err);
+    return assetResponse;
+  }
+
+  if (!posts || posts.length === 0) return assetResponse;
+
+  const cardsHtml = posts.map(newsCardHtml).join('');
+  const rewriter = new HTMLRewriter().on('.news-grid', {
+    element(el) {
+      el.setInnerContent(cardsHtml, { html: true });
+    },
+  });
+  return rewriter.transform(assetResponse);
+}
+
+function newsCardHtml(post) {
+  return `
+    <article class="news-card" data-reveal tabindex="0">
+      <div class="media-frame"><img class="js-img" data-path="${escapeHtml(post.image)}" src="${escapeHtml(post.image)}" alt="${escapeHtml(post.image_alt)}" loading="lazy"></div>
+      <div class="news-overlay">
+        <span class="news-tag">${escapeHtml(post.tag)}</span>
+        <h3 class="news-title">${escapeHtml(post.title)}</h3>
+        <time class="news-date" datetime="${escapeHtml(post.published_date)}">${escapeHtml(formatDate(post.published_date))}</time>
+        <p class="news-excerpt">${escapeHtml(post.excerpt)}</p>
+      </div>
+    </article>`;
+}
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function escapeHtml(str) {
+  return String(str == null ? '' : str).replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[c]));
+}
 
 async function handleContact(request, env) {
   const origin = request.headers.get('origin');

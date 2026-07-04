@@ -193,13 +193,45 @@ repo via **Workers & Pages → Connect to Git** in the Cloudflare dashboard.
 - `[assets]` serves every file in this folder as-is (`directory = "./"`),
   with `not_found_handling = "404-page"` so unmatched paths serve
   `404.html`, matching local preview via `serve.py`.
-- `main = "worker/index.js"` is a small Worker script that only intercepts
-  `POST /api/contact` (the contact form backend, see below) — every other
-  request falls through to the static assets untouched.
+- `main = "worker/index.js"` is a small Worker script that intercepts
+  `POST /api/contact` (the contact form backend) and `GET /news`/`/news/`
+  (D1-backed news posts, see below) — every other request falls through to
+  the static assets untouched. `run_worker_first = true` in `wrangler.toml`
+  is required for this: without it, Cloudflare serves any request matching
+  a real static file (like `/news/` → `news/index.html`) directly, without
+  ever invoking the Worker script at all.
 
 Every future content update (editing HTML, adding project images) just
 needs a new commit/push to `master` — Cloudflare redeploys automatically.
 No build command is needed.
+
+## News posts (D1-backed)
+
+News posts live in the D1 `news_posts` table (schema in
+`migrations/0002_create_news_posts.sql`), not in `news/index.html`. On
+every request to `/news`, `worker/index.js` fetches posts from D1 and
+injects them into the page server-side (via `HTMLRewriter`, replacing the
+`.news-grid` contents) — the response the browser gets is still plain
+HTML with the real posts already in it, no client-side fetch/render step.
+If the table is empty (or the query fails), the page's static placeholder
+cards show through untouched, so the page never looks broken.
+
+Add a post with the CLI script (no dependencies, shells out to
+`wrangler d1 execute`):
+
+```
+node scripts/add-news-post.js
+```
+
+Run with no arguments for interactive prompts, or pass every field as a
+flag for one-shot/scripted use:
+
+```
+node scripts/add-news-post.js --title "..." --tag "Announcement" --excerpt "..." --image "/assets/images/news/foo.jpg" --alt "..." [--date YYYY-MM-DD]
+```
+
+Add `--local --persist-to <path>` (matching whatever you pass to
+`wrangler dev`) to write to your local dev database instead of the live one.
 
 ## Contact form backend (D1 + email notification)
 

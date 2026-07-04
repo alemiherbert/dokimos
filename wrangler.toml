@@ -6,6 +6,12 @@ compatibility_date = "2026-07-04"
 directory = "./"
 binding = "ASSETS"
 not_found_handling = "404-page"
+# Without this, Cloudflare serves any request matching a real static file
+# (e.g. /news/ -> news/index.html) directly, without ever invoking the
+# Worker's fetch() handler below -- which is how /api/contact worked from
+# the start (no static file matches that path) but /news silently never
+# reached handleNewsPage until this was added.
+run_worker_first = true
 
 [vars]
 # Resend's unverified onboarding@resend.dev sender can only deliver to the
