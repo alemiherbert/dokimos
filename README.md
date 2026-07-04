@@ -1,11 +1,11 @@
 # Dokimos Consulting — Website
 
 A 5-page static site (Home, Work, People, News, Contact) plus a custom 404
-page. No build step, no framework, no npm install. Every piece of text,
-every stat, every project card, and every image path lives in
-**`content.json`**, split into one namespace per page. `js/main.js` reads
-that file and, based on which page you're on, renders the relevant
-sections. To update the site, you almost always just edit `content.json`.
+page. No build step, no framework, no npm install. Every page's content is
+real, static HTML — `js/main.js` only adds interactive behavior (dark-mode
+toggle, mobile nav, hero carousel, work filters, contact form submission,
+scroll-reveal animations, cookie banner, broken-image fallback). To update
+the site, edit the relevant page's HTML directly.
 
 ## Pages & clean URLs
 
@@ -20,70 +20,87 @@ sections. To update the site, you almost always just edit `content.json`.
 ```
 
 Each page is a real folder with its own `index.html`. Static web servers
-(including Cloudflare Pages and the local preview commands below) serve
-`index.html` automatically when a folder URL is requested. Internal links
-use the no-trailing-slash form (`/work`, not `/work/`) — this is plain
-multi-page HTML, not a JavaScript router: no history-API fallback or
-`_redirects` config is needed, and every page works if opened directly.
-`404.html` at the project root is served automatically by Cloudflare Pages
+(including the Cloudflare Worker this site deploys to and the local
+preview commands below) serve `index.html` automatically when a folder URL
+is requested. Internal links use the no-trailing-slash form (`/work`, not
+`/work/`) — this is plain multi-page HTML, not a JavaScript router: no
+history-API fallback or `_redirects` config is needed, and every page works
+if opened directly. `404.html` at the project root is served automatically
 for any unmatched path.
 
-All pages share the same `<header>`/`<footer>` (rendered by `js/main.js`
-from `site`/`nav`/`footer` in `content.json`) and the same `css/style.css`
-and `js/main.js`, referenced with root-relative paths (`/css/style.css`,
-`/js/main.js`, `/content.json`, `/logo.svg`) so they resolve correctly no
-matter how deep the page's folder is.
+All 6 pages independently maintain identical copies of the shared
+`<header>`/`<footer>`/mobile-nav markup and the theme-detection `<head>`
+script (see "Dark mode" below) — there's no templating layer, so a change
+to shared chrome (e.g. adding a nav item) means editing all 6 files. Each
+page references the same `css/style.css` and `js/main.js` with
+root-relative paths (`/css/style.css`, `/js/main.js`, `/logo.svg`) so they
+resolve correctly no matter how deep the page's folder is.
 
 There used to be a separate About page — its mission/values/practice-area
-content now lives directly on Home (under `home.about`, `home.services`,
-`home.approach`), and About's old nav slot is now **News**.
+content now lives directly on Home (the `#about`, `#services`, and
+`#approach` sections in `index.html`), and About's old nav slot is now
+**News**.
 
 ## Updating content
 
-Open `content.json` in any text editor. Top-level keys map to pages:
-`home`, `work`, `people`, `news`, `contact` — plus shared `site`, `nav`,
-`footer`, and `cookieBanner` data used everywhere.
+There's no JSON file or build step in between — open the page's HTML file
+and edit the markup directly. Each content block uses plain, repeated CSS
+classes (`.project-card`, `.person-card`, `.news-card`, `.value-card`,
+etc.), so adding a new one is almost always "copy an existing block, change
+the text and image path."
 
-- **Change text anywhere** — edit the string value. No HTML involved.
-- **Add a new project** — copy one object inside `work.items`, paste it as
-  a new entry, edit its fields, and drop a matching image into
+- **Change text anywhere** — find it in the relevant `.html` file and edit
+  it directly.
+- **Add a new project** — copy a `.project-card` block in `work/index.html`
+  as a template, edit its fields, and drop a matching image into
   `assets/images/projects/` (see the `PUT_IMAGES_HERE.md` note in that
-  folder). It appears on the Work page automatically; add `"featured":
-  true` to also show it in Home's "Featured Work" teaser. That teaser shows
-  3 projects on desktop/tablet and 4 on narrow (mobile) screens, so keep at
-  least 4 items flagged `featured` if you want the 4th to have something to
-  show.
-- **Add/remove a hero slide (Home)** — edit `home.hero.slides` (each slide
-  is `image` + `imageAlt` + `headline` + `subheadline` + `href`). The
-  background image, headline/subheading, and rectangular progress bars all
-  advance together and resize to match however many slides are listed.
-- **Add/remove a team member (People)** — edit `people.members`
-  (`name` + `role` + `photo` + `bio`). This whole page is placeholder
-  content — see `assets/images/people/PUT_IMAGES_HERE.md`.
-- **Add/remove a news post (News)** — edit `news.posts`
-  (`title` + `date` + `tag` + `excerpt` + `image`). Also placeholder
-  content — see `assets/images/news/PUT_IMAGES_HERE.md`.
-- **Add/remove a client/partner logo (Home)** — edit `home.trust.logos`.
-- **Edit practice areas / capabilities (Home)** — `home.services.pillars`.
-- **Edit the process steps (Home)** — `home.approach.steps`.
-- **Change a stat, mission copy, or values (Home)** — `home.stats`,
-  `home.about.lead`/`home.about.body`/`home.about.values`.
-- **Edit the cookie banner text** — `cookieBanner.message` /
-  `acceptLabel` / `declineLabel`.
+  folder). To also feature it on Home, copy the same block into
+  `index.html`'s `#featured-work` `.projects-grid` — **there's no shared
+  data source anymore, so featured projects are hand-duplicated between the
+  two files and can drift if you only update one.** That teaser shows 3
+  cards on desktop/tablet and 4 on narrow (mobile) screens via
+  `#featured-work .projects-grid .project-card:nth-child(4)` in
+  `css/style.css` — card **order** matters for that rule (see the HTML
+  comment above the grid in `index.html`), so keep exactly 4 cards there.
+- **Add/remove a hero slide (Home)** — edit the `.hero-slide` divs inside
+  `#hero-media` in `index.html` (each carries `data-headline`,
+  `data-subheadline`, and `data-href` attributes the carousel JS reads) and
+  add/remove a matching `.carousel-bar` button in `#carousel-bars`. Slide 0's
+  data attributes must match the initial static `#hero-headline`/
+  `#hero-subheadline` content, since that's what's visible before any JS runs.
+- **Add/remove a team member (People)** — copy/remove a `.person-card`
+  block in `people/index.html`. This whole page is placeholder content —
+  see `assets/images/people/PUT_IMAGES_HERE.md`.
+- **Add/remove a news post (News)** — copy/remove a `.news-card` block in
+  `news/index.html`. Also placeholder content — see
+  `assets/images/news/PUT_IMAGES_HERE.md`.
+- **Add/remove a client/partner logo (Home)** — copy/remove a `.trust-logo`
+  block in `index.html`'s `#trust` section.
+- **Edit practice areas / capabilities (Home)** — the `.pillar-card` blocks
+  in `index.html`'s `#services` section (each has an inline SVG icon —
+  copy an existing one's `<svg>` if you're not replacing the icon).
+- **Edit the process steps (Home)** — the `.step-card` blocks in
+  `index.html`'s `#approach` section.
+- **Change a stat, mission copy, or values (Home)** — the `.stat-value`/
+  `.stat-label` pairs in `#stats-bar`, and the `.value-card` blocks in
+  `#about`, both in `index.html`.
+- **Edit the cookie banner text** — the `.cookie-banner-text`/button labels
+  inside `#cookie-banner`, duplicated in all 6 HTML files.
+- **Add/remove a nav item, or edit the footer/contact details** — these
+  appear in the header `<nav>`, the mobile nav drawer, and the footer of
+  **every** page, so update all 6 files together.
 
-`content.json` has a `_meta.placeholder: true` flag as a reminder that some
-content (the People roster, the News posts, sample "Concept" projects,
-stats, and the `home.trust.logos` tiles) is placeholder-first content
-written to demonstrate structure. Replace it with real
-people/posts/projects/photos/figures before treating the site as final,
-and consider removing the `_meta` note once done.
+HTML comments mark content that's still placeholder-first (the People
+roster, News posts, sample "Concept" projects, and the `#trust` logo
+tiles) — search each page for `<!-- PLACEHOLDER CONTENT` and replace with
+real people/posts/projects/photos/figures before treating the site as final.
 
 ### Images
 
-Every image referenced in `content.json` is loaded by path. If a file
-doesn't exist yet, the site automatically shows a clearly-labeled
-placeholder instead of a broken image — so you can publish structure now
-and drop in real photography later with zero code changes.
+Every image is loaded by its `src`/`data-path`. If a file doesn't exist
+yet, the site automatically shows a clearly-labeled placeholder instead of
+a broken image — so you can publish structure now and drop in real
+photography later with zero code changes.
 
 Each `assets/images/<folder>/PUT_IMAGES_HERE.md` file lists the exact
 filenames and recommended dimensions expected. General guidance for crisp,
@@ -100,8 +117,9 @@ sharp results:
 Every color on the site is a CSS custom property defined once in
 `css/style.css` under `:root` (light) and `html[data-theme="dark"]` (dark)
 — there's no per-component dark-mode styling to maintain. The toggle button
-in the header (rendered by `renderHeader()` in `js/main.js`) flips
-`<html data-theme>` and saves the choice to `localStorage['theme']`.
+is static markup in every page's `<header>`; `setupThemeToggle()` in
+`js/main.js` flips `<html data-theme>` and saves the choice to
+`localStorage['theme']`.
 
 Every page has a tiny inline `<script>` at the very top of `<head>` (before
 any CSS loads) that reads `localStorage` — or falls back to the visitor's
@@ -116,23 +134,23 @@ same variables and updates automatically.
 
 ## Cookie banner
 
-A small consent banner (`cookieBanner` in `content.json`) slides up from
-the bottom on first visit and doesn't reappear once the visitor clicks
-Accept or Decline (`setupCookieBanner()` in `js/main.js` stores the choice
-in `localStorage['cookieConsent']`). It's currently cosmetic — this site
-doesn't set any tracking cookies itself — so wire it up to your actual
-analytics/consent logic if you add any later.
+A small consent banner (static markup in `#cookie-banner`, duplicated on
+every page) slides up from the bottom on first visit and doesn't reappear
+once the visitor clicks Accept or Decline (`setupCookieBanner()` in
+`js/main.js` stores the choice in `localStorage['cookieConsent']`). It's
+currently cosmetic — this site doesn't set any tracking cookies itself —
+so wire it up to your actual analytics/consent logic if you add any later.
 
 ## Local preview
 
-Because pages fetch `/content.json` via JavaScript, opening `index.html`
-directly (`file://...`) will fail in most browsers (blocked by CORS), and
-root-relative asset paths won't resolve either. Serve the folder over local
-HTTP instead.
+Root-relative asset paths (`/css/style.css`, `/js/main.js`, `/logo.svg`)
+won't resolve over `file://...` — opening `index.html` directly will look
+broken (no styles, no behavior). Serve the folder over local HTTP instead.
 
 Recommended — this repo's own dev server (Python stdlib only, no
-dependencies), which matches Cloudflare Pages' unmatched-path → `404.html`
-behavior and auto-refreshes the browser tab whenever a file changes:
+dependencies), which matches the deployed Worker's unmatched-path →
+`404.html` behavior and auto-refreshes the browser tab whenever a file
+changes:
 
 ```
 python serve.py 8080
@@ -167,9 +185,9 @@ repo via **Workers & Pages → Connect to Git** in the Cloudflare dashboard.
   `POST /api/contact` (the contact form backend, see below) — every other
   request falls through to the static assets untouched.
 
-Every future content update (editing `content.json`, adding project
-images) just needs a new commit/push to `master` — Cloudflare redeploys
-automatically. No build command is needed.
+Every future content update (editing HTML, adding project images) just
+needs a new commit/push to `master` — Cloudflare redeploys automatically.
+No build command is needed.
 
 ## Contact form backend (D1 + email notification)
 
@@ -186,17 +204,20 @@ The contact form (`/contact`) posts JSON to `/api/contact`, handled by
 
 ### One-time setup (requires Cloudflare/Wrangler login)
 
+The production database (`dokimos-db`) and its `database_id` are already
+set in `wrangler.toml`. To create a **new** one from scratch (e.g. for a
+separate environment):
+
 ```
 npx wrangler login
-npx wrangler d1 create dokimos-contacts
+npx wrangler d1 create <your-db-name>
 ```
 
 Copy the `database_id` from the output into `wrangler.toml`'s
-`[[d1_databases]]` block (replacing `REPLACE_WITH_D1_DATABASE_ID`), then
-apply the schema:
+`[[d1_databases]]` block, then apply the schema:
 
 ```
-npx wrangler d1 execute dokimos-contacts --remote --file=migrations/0001_create_contact_submissions.sql
+npx wrangler d1 execute <your-db-name> --remote --file=migrations/0001_create_contact_submissions.sql
 ```
 
 Sign up at resend.com, create an API key, and set it as a Worker secret
@@ -226,15 +247,3 @@ verification, which is why it's used as the default `from` address in
 `worker/index.js`. Once a real domain (e.g. `dokimos.co.ug`) is verified
 in Resend, switch the sender to an address on that domain for better
 deliverability.
-
-## Known trade-off
-
-Content is rendered client-side from `content.json` rather than baked into
-static HTML at build time. This keeps updates code-free, but means each
-page (except 404.html, which is static) is empty until JavaScript runs
-(fine for users and for Google/Bing, which both execute JS — but relevant
-if you later care about non-JS crawlers or very old browsers). If that
-ever becomes a problem, the fix is moving to a static-site generator (e.g.
-Astro/11ty) that pre-renders `content.json` into HTML at build time — the
-content schema and the folder-per-page URL structure would carry over
-largely as-is.
