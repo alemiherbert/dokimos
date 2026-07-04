@@ -329,8 +329,8 @@
     "eyebrow": "Get In Touch",
     "heading": "Let's engineer something proven.",
     "intro": "Whether it's a feasibility study or a full design brief, tell us where you're starting from.",
-    "formNote": "This form needs a submission endpoint before it goes live — see README.md for a 5-minute setup with Web3Forms or Formspree.",
-    "formAction": "#"
+    "formNote": "We typically respond within one business day.",
+    "formAction": "/api/contact"
   },
   "footer": {
     "note": "Dokimos Consulting — Indigenous Ugandan engineering, built for Africa's hardest infrastructure problems."

@@ -453,6 +453,48 @@
       </div>`;
   }
 
+  function setupContactForm() {
+    const form = document.querySelector('.contact-form');
+    if (!form) return;
+    const note = form.querySelector('.form-note');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const defaultBtnLabel = submitBtn ? submitBtn.textContent : '';
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = Object.fromEntries(new FormData(form).entries());
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+      if (note) note.classList.remove('form-note--success', 'form-note--error');
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok || !result.ok) {
+          throw new Error(result.error || 'Something went wrong. Please try again.');
+        }
+        form.reset();
+        if (note) {
+          note.textContent = 'Thanks — your message has been sent. We will be in touch soon.';
+          note.classList.add('form-note--success');
+        }
+      } catch (err) {
+        if (note) {
+          note.textContent = err.message || 'Something went wrong. Please try again or email us directly.';
+          note.classList.add('form-note--error');
+        }
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = defaultBtnLabel;
+      }
+    });
+  }
+
   /* ---------------------------------------------------------------------
    * Shared behaviour
    * ------------------------------------------------------------------- */
@@ -655,6 +697,7 @@
         renderNews(data.news);
       } else if (page === 'contact') {
         renderContact(data.contact, data.site);
+        setupContactForm();
       }
 
       attachImageFallbacks(document);

@@ -840,6 +840,8 @@ body:not([data-page="home"]) #main-content { padding-top: 24px; }
 }
 .form-field input:focus, .form-field textarea:focus { outline: none; border-color: var(--blue); }
 .form-note { font-size: 0.82rem; color: var(--ink-faint); margin-top: -0.3rem; }
+.form-note--success { color: var(--blue); }
+.form-note--error { color: #c0392b; }
 @media (max-width: 760px) {
   .contact-grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }

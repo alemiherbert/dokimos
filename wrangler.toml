@@ -1,0 +1,17 @@
+name = "dokimos"
+main = "worker/index.js"
+compatibility_date = "2026-07-04"
+
+[assets]
+directory = "./"
+binding = "ASSETS"
+not_found_handling = "404-page"
+
+[vars]
+CONTACT_RECIPIENT = "info.charis.systems@gmail.com"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dokimos-contacts"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+migrations_dir = "migrations"
